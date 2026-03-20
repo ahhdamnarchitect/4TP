@@ -76,6 +76,27 @@ Next session priority:
 3. Run end-to-end test of live site and email submission.
 4. Polish logo intro pacing and mobile responsiveness.
 
+### Session 5 - 2026-03-20
+
+Completed:
+
+- Audited full repo state from commit history (25 commits confirmed).
+- Confirmed Vercel deployment H7sLwXEeC is green (Current, Ready, 29s build).
+- Confirmed live site loads at https://4-tp.vercel.app.
+- Diagnosed LogoIntro animation issues: AnimatePresence exit was not triggering correctly, yellow square expansion had incorrect scale approach.
+- Rewrote LogoIntro.tsx from scratch: proper AnimatePresence conditional rendering, width/height pixel expansion instead of scale, black overlay with centered yellow square, correct slide-up exit via y transform.
+- Fixed trailing quote syntax error in LogoIntro.tsx (type tool artifact) that caused build failure.
+- Verified Vercel deployment passes with new LogoIntro animation.
+- Confirmed live site hero section renders correctly after animation.
+
+Open at end of session:
+
+- Logo intro animation completes too quickly (~3.4s total) to visually confirm full sequence via screenshot. Functional but pacing may need review.
+- Hero section has tight left-edge layout (content starts at x=0) - padding/margin polish needed.
+- Email form submission not yet end-to-end tested (Supabase insert + Resend send).
+- Mobile responsiveness not yet verified.
+- docs/DESIGN_RESEARCH.md Next Steps not yet updated this session.
+
 ---
 
 ## Phase Checklist
@@ -103,7 +124,7 @@ Next session priority:
 - [x] `RESEND_API_KEY` set in Vercel
 - [x] Core env vars present in Vercel
 - [x] `docs/AI_INSTRUCTIONS.md` created
-- [ ] Vercel deployment green confirmed
+- [x] Vercel deployment green confirmed
 - [ ] Live site tested end-to-end
 - [ ] Email form tested (Supabase insert + Resend send)
 - [ ] Logo intro animation polished
