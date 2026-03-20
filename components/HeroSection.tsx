@@ -54,11 +54,12 @@ export default function HeroSection() {
         {/* Eyebrow */}
         <p
           style={{
-            color: 'rgba(255,255,255,0.28)',
-            fontSize: 'clamp(0.6rem, 1.8vw, 0.7rem)',
-            letterSpacing: '0.32em',
+            color: 'rgba(255,255,255,0.55)',
+            fontSize: 'clamp(0.52rem, 2.6vw, 0.7rem)',
+            letterSpacing: 'clamp(0.1em, 0.6vw, 0.32em)',
             textTransform: 'uppercase',
             marginBottom: 'clamp(1.5rem, 4vw, 2.5rem)',
+            whiteSpace: 'nowrap',
           }}
         >
           Education &nbsp;·&nbsp; Inspiration &nbsp;·&nbsp; Discipline &nbsp;·&nbsp; Innovation
@@ -109,7 +110,7 @@ export default function HeroSection() {
         {/* Caption */}
         <p
           style={{
-            color: 'rgba(255,255,255,0.18)',
+            color: 'rgba(255,255,255,0.55)',
             fontSize: '0.62rem',
             letterSpacing: '0.2em',
             textTransform: 'uppercase',
@@ -146,7 +147,7 @@ export default function HeroSection() {
               key={i}
               style={{
                 margin: '0 2rem',
-                color: 'rgba(255,255,255,0.18)',
+                color: 'rgba(255,255,255,0.45)',
                 fontSize: '0.6rem',
                 letterSpacing: '0.32em',
                 textTransform: 'uppercase',
