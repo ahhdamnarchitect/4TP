@@ -1,20 +1,24 @@
 import LogoIntro from '@/components/LogoIntro'
 import Nav from '@/components/Nav'
 import HeroSection from '@/components/HeroSection'
+import Cursor from '@/components/Cursor'
 
 export default function Home() {
   return (
-    <main style={{ background: '#0A0A0A', minHeight: '100vh', position: 'relative' }}>
-      {/* Grain overlay for texture */}
+    <main style={{ background: '#000', minHeight: '100vh', position: 'relative' }}>
+      {/* Grain overlay */}
       <div className="grain-overlay" aria-hidden="true" />
 
-      {/* Logo intro animation — plays once on load */}
+      {/* Custom cursor (desktop only — CSS hides system cursor on pointer devices) */}
+      <Cursor />
+
+      {/* Logo intro animation — covers page, then slides up */}
       <LogoIntro />
 
-      {/* Top navigation — fades in after intro */}
+      {/* Top nav — fades in after intro */}
       <Nav />
 
-      {/* Main hero content */}
+      {/* Main content — always rendered, revealed when LogoIntro exits */}
       <HeroSection />
     </main>
   )

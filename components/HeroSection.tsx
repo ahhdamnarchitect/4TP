@@ -1,197 +1,185 @@
 'use client'
 
-import { motion } from 'framer-motion'
-import Image from 'next/image'
 import EmailForm from './EmailForm'
 
 /**
- * HeroSection — Full-screen landing page.
+ * HeroSection — ComplexCon-inspired dark editorial layout.
  *
- * Design:
- * - 4TPCirclePppl.png as cinematic faded background
- * - Centered max-width container (complexcon-style editorial layout)
- * - Large bold headline, tagline, email CTA
- * - Values ticker at bottom
+ * Design principles:
+ * - Solid black background (no background image)
+ * - Oversized display typography fills the viewport width
+ * - Content is ALWAYS visible — LogoIntro overlay reveals it on exit
+ * - Yellow (#FEEB3D) as the sole brand accent
+ * - Two-column bottom split: copy + form on left, year stamp on right
+ * - Thin yellow rule + values marquee at the bottom
  */
 
-const DELAY = 3.3 // seconds — waits for LogoIntro + Nav to appear
-
-const fadeUp = {
-  hidden: { opacity: 0, y: 22 },
-  visible: (i: number) => ({
-    opacity: 1,
-    y: 0,
-    transition: {
-      delay: DELAY + i * 0.1,
-      duration: 0.85,
-      ease: [0.16, 1, 0.3, 1],
-    },
-  }),
-}
-
-const VALUES = [
-  'EDUCATION',
-  'INSPIRATION',
-  'DISCIPLINE',
-  'INNOVATION',
-  'MOVE FORWARD',
-]
+const VALUES = ['EDUCATION', 'INSPIRATION', 'DISCIPLINE', 'INNOVATION', 'MOVE FORWARD']
 
 export default function HeroSection() {
   return (
     <section
-      className="relative min-h-screen flex flex-col overflow-hidden"
-      aria-label="4TP Landing Hero"
+      style={{
+        minHeight: '100vh',
+        background: '#000',
+        display: 'flex',
+        flexDirection: 'column',
+        fontFamily: 'Inter, InterVariable, system-ui, sans-serif',
+      }}
+      aria-label="4TP Hero"
     >
-      {/* ── Cinematic background — people image, deeply dimmed ── */}
-      <div className="absolute inset-0 z-0">
-        <Image
-          src="/4TPCirclePppl.png"
-          alt=""
-          fill
-          style={{ objectFit: 'cover', objectPosition: 'center 20%' }}
-          aria-hidden="true"
-          priority
-        />
-        {/* Dark overlay */}
-        <div
-          className="absolute inset-0"
-          style={{ background: 'rgba(10, 10, 10, 0.70)' }}
-        />
-        {/* Vignette gradient — bottom fade to black */}
-        <div
-          className="absolute bottom-0 left-0 right-0"
+      {/* ── Main hero body ── */}
+      <div
+        style={{
+          flex: 1,
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'space-between',
+          padding: 'clamp(6rem, 10vw, 9rem) clamp(1.5rem, 5vw, 5rem) clamp(2rem, 4vw, 3.5rem)',
+          maxWidth: '1600px',
+          width: '100%',
+          margin: '0 auto',
+          boxSizing: 'border-box',
+        }}
+      >
+
+        {/* ── Eyebrow line ── */}
+        <p
           style={{
-            height: '55%',
-            background: 'linear-gradient(to bottom, transparent, #0A0A0A 90%)',
+            color: 'rgba(255,255,255,0.3)',
+            fontSize: '0.68rem',
+            letterSpacing: '0.32em',
+            textTransform: 'uppercase',
+            marginBottom: '2rem',
           }}
-        />
-        {/* Vignette gradient — top fade for nav legibility */}
-        <div
-          className="absolute top-0 left-0 right-0"
-          style={{
-            height: '30%',
-            background: 'linear-gradient(to top, transparent, rgba(10,10,10,0.6))',
-          }}
-        />
-      </div>
+        >
+          Education &nbsp;·&nbsp; Inspiration &nbsp;·&nbsp; Discipline &nbsp;·&nbsp; Innovation
+        </p>
 
-      {/* ── Centered editorial container ── */}
-      <div className="relative z-10 flex flex-col flex-1 max-w-screen-xl mx-auto w-full px-8 md:px-16">
-
-        {/* Main content block */}
-        <div className="flex flex-col justify-end flex-1 pb-24 md:pb-32 pt-40">
-
-          {/* Tagline */}
-          <motion.p
-            custom={0}
-            initial="hidden"
-            animate="visible"
-            variants={fadeUp}
-            className="text-white/40 tracking-[0.28em] uppercase text-xs font-medium mb-10"
-          >
-            Education &nbsp;·&nbsp; Inspiration &nbsp;·&nbsp; Discipline &nbsp;·&nbsp; Innovation
-          </motion.p>
-
-          {/* Headline */}
-          <motion.h1
-            custom={1}
-            initial="hidden"
-            animate="visible"
-            variants={fadeUp}
+        {/* ── Display headline ── */}
+        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+          <h1
             style={{
-              fontFamily: 'Inter, sans-serif',
               fontWeight: 900,
-              fontSize: 'clamp(3.8rem, 11vw, 10rem)',
-              lineHeight: '0.91',
-              letterSpacing: '-0.04em',
-              color: '#FFFFFF',
+              fontSize: 'clamp(4.5rem, 14.5vw, 17rem)',
+              lineHeight: 0.88,
+              letterSpacing: '-0.03em',
+              color: '#fff',
+              textTransform: 'uppercase',
+              margin: 0,
             }}
           >
-            Move<br />
-            <span style={{ color: '#FEEB3D' }}>Forward.</span>
-          </motion.h1>
-
-          {/* Divider */}
-          <motion.div
-            custom={2}
-            initial="hidden"
-            animate="visible"
-            variants={fadeUp}
-            className="mt-10 mb-8"
-            style={{ width: 48, height: 1, background: 'rgba(255,255,255,0.15)' }}
-          />
-
-          {/* Supporting copy */}
-          <motion.p
-            custom={3}
-            initial="hidden"
-            animate="visible"
-            variants={fadeUp}
-            className="text-white/50 max-w-sm text-base leading-relaxed font-light mb-10"
-          >
-            A creative space for those who push boundaries,
-            challenge perspectives, and move through life with purpose.
-          </motion.p>
-
-          {/* Email form */}
-          <motion.div
-            custom={4}
-            initial="hidden"
-            animate="visible"
-            variants={fadeUp}
-            className="max-w-md"
-          >
-            <EmailForm />
-          </motion.div>
-
-          <motion.p
-            custom={5}
-            initial="hidden"
-            animate="visible"
-            variants={fadeUp}
-            className="text-white/20 text-xs tracking-wider mt-4"
-          >
-            Join the network. Be first to know.
-          </motion.p>
+            MOVE
+            <br />
+            <span style={{ color: '#FEEB3D' }}>FORWARD.</span>
+          </h1>
         </div>
 
-        {/* Scroll indicator */}
-        <motion.div
-          className="absolute bottom-20 right-8 md:right-16 flex flex-col items-center gap-2"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: DELAY + 0.9, duration: 0.6 }}
-          aria-hidden="true"
+        {/* ── Bottom row: copy + form | year stamp ── */}
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'flex-end',
+            justifyContent: 'space-between',
+            gap: '3rem',
+            flexWrap: 'wrap',
+            marginTop: '3rem',
+          }}
         >
-          <div className="w-px bg-white/20" style={{ height: '52px' }} />
-          <span
-            className="text-white/25 text-[10px] tracking-[0.2em] uppercase"
-            style={{ writingMode: 'vertical-rl' }}
+          {/* Left: description + email form */}
+          <div style={{ maxWidth: '420px', flex: '1 1 300px' }}>
+            {/* Yellow rule */}
+            <div
+              style={{
+                width: '48px',
+                height: '2px',
+                background: '#FEEB3D',
+                marginBottom: '1.5rem',
+              }}
+            />
+
+            <p
+              style={{
+                color: 'rgba(255,255,255,0.45)',
+                fontSize: '0.95rem',
+                lineHeight: 1.65,
+                marginBottom: '1.75rem',
+                fontWeight: 300,
+              }}
+            >
+              A creative network for those who push boundaries,
+              challenge perspectives, and move through life with purpose.
+            </p>
+
+            <EmailForm />
+
+            <p
+              style={{
+                color: 'rgba(255,255,255,0.15)',
+                fontSize: '0.65rem',
+                letterSpacing: '0.18em',
+                textTransform: 'uppercase',
+                marginTop: '0.75rem',
+              }}
+            >
+              Join the network — be first to know
+            </p>
+          </div>
+
+          {/* Right: large faded year */}
+          <div
+            style={{
+              fontWeight: 900,
+              fontSize: 'clamp(5rem, 12vw, 11rem)',
+              lineHeight: 1,
+              letterSpacing: '-0.05em',
+              color: 'rgba(255,255,255,0.04)',
+              userSelect: 'none',
+              flexShrink: 0,
+            }}
+            aria-hidden="true"
           >
-            Scroll
-          </span>
-        </motion.div>
+            2026
+          </div>
+        </div>
       </div>
 
-      {/* ── Bottom values ticker ── */}
-      <motion.div
-        className="relative z-10 border-t border-white/[0.06] overflow-hidden py-4"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: DELAY + 0.7, duration: 0.8 }}
+      {/* ── Yellow accent rule ── */}
+      <div
+        style={{
+          height: '2px',
+          background: '#FEEB3D',
+          margin: '0 clamp(1.5rem, 5vw, 5rem)',
+        }}
+      />
+
+      {/* ── Values marquee ── */}
+      <div
+        style={{
+          overflow: 'hidden',
+          padding: '1rem 0',
+          borderBottom: '1px solid rgba(255,255,255,0.05)',
+        }}
       >
         <div className="marquee-track">
-          {[...VALUES, ...VALUES].map((item, i) => (
+          {[...VALUES, ...VALUES].map((v, i) => (
             <span
               key={i}
-              className="mx-8 text-white/20 text-xs tracking-[0.3em] uppercase font-medium"
+              style={{
+                margin: '0 2.5rem',
+                color: 'rgba(255,255,255,0.18)',
+                fontSize: '0.65rem',
+                letterSpacing: '0.32em',
+                textTransform: 'uppercase',
+                fontWeight: 500,
+                whiteSpace: 'nowrap',
+              }}
             >
-              {item}
+              {v}
             </span>
           ))}
         </div>
-      </motion.div>
+      </div>
     </section>
   )
 }
