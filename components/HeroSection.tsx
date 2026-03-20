@@ -51,17 +51,8 @@ export default function HeroSection() {
           gap: '0',
         }}
       >
-        {/* Eyebrow */}
-        <p
-          style={{
-            color: 'rgba(255,255,255,0.55)',
-            fontSize: 'clamp(0.52rem, 2.6vw, 0.7rem)',
-            letterSpacing: 'clamp(0.1em, 0.6vw, 0.32em)',
-            textTransform: 'uppercase',
-            marginBottom: 'clamp(1.5rem, 4vw, 2.5rem)',
-            whiteSpace: 'nowrap',
-          }}
-        >
+        {/* Eyebrow — CSS class handles font-size/letter-spacing breakpoints */}
+        <p className="eyebrow-text">
           Education &nbsp;·&nbsp; Inspiration &nbsp;·&nbsp; Discipline &nbsp;·&nbsp; Innovation
         </p>
 
@@ -107,16 +98,8 @@ export default function HeroSection() {
           <EmailForm />
         </div>
 
-        {/* Caption */}
-        <p
-          style={{
-            color: 'rgba(255,255,255,0.55)',
-            fontSize: '0.62rem',
-            letterSpacing: '0.2em',
-            textTransform: 'uppercase',
-            marginTop: '1rem',
-          }}
-        >
+        {/* Caption — CSS class handles color so it's easy to update globally */}
+        <p className="caption-text">
           Join the network — be first to know
         </p>
       </div>
