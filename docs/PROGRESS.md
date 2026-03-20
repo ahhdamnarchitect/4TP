@@ -1,179 +1,198 @@
 # 4TP — Development Progress Log
 
 > **Update this file every commit.** This is the source of truth for project state.
-> Last Updated: March 20, 2026
-
----
-
-## Current Status: Phase 1 — Landing Page IN PROGRESS
-
----
-
-## Session Log
-
-### Session 1 — March 20, 2026
-**What was done:**
-- Initial project setup and strategy (Claude consultation)
-- README.md created with full project brief, tech stack, phases
-- Vercel project connected: https://vercel.com/ahhdamndev/4-tp
-- Supabase project created: https://supabase.com/dashboard/project/nhgwjshndtoudvmrzhup
-- Resend account connected
-
-**What was decided:**
-- Stack: Next.js (App Router) + Tailwind + Vercel + Supabase + Resend
-- No Mailchimp, Jotform, or Google Sheets
-- Phase 1 deliverable: landing page with email capture + confirmation email
-
-### Session 2 — March 20, 2026
-**What was done:**
-- README updated: pricing section removed (private), animation notes clarified
-- docs/DESIGN_RESEARCH.md created: 2026 trends, animation plan, font system, color tokens
-- docs/PROGRESS.md created (this file)
-- Full project file structure scaffolded
-- Landing page built: app/page.tsx with full hero, animation, email form
-
-**Animation Spec Confirmed:**
-- Client video reference: shape starts as a circle → morphs/blends → expands into full logo
-- For 4TP: **yellow square** → morphs/expands into **full 4TP logo mark**
-- OuiOui001 pacing reference: slow, deliberate, confident
-
-**What still needs to be done:**
-- Supabase `subscribers` table setup (run SQL in dashboard)
-- Resend API key wired in `.env.local`
-- Email confirmation template finalized
-- Deploy to Vercel and verify live URL
-
----
-
-## File Structure
-
-```
-4TP/
-├── README.md                          # Project brief (public-facing)
-├── docs/
-│   ├── DESIGN_RESEARCH.md             # 2026 trends + animation + font research
-│   └── PROGRESS.md                    # This file — session log + status
-├── app/
-│   ├── layout.tsx                     # Root layout with Inter font + metadata
-│   ├── page.tsx                       # Landing page (hero + email form)
-│   ├── globals.css                    # Global styles + CSS variables
-│   └── api/
-│       └── subscribe/
-│           └── route.ts               # POST /api/subscribe → Supabase + Resend
-├── components/
-│   ├── LogoIntro.tsx                  # Animated logo entrance sequence
-│   ├── HeroSection.tsx                # Full-screen hero with email form
-│   ├── EmailForm.tsx                  # Email capture form component
-│   └── ScrollReveal.tsx               # Scroll-triggered reveal wrapper
-├── lib/
-│   ├── supabase.ts                    # Supabase client
-│   └── resend.ts                      # Resend client
-├── public/
-│   └── 4tp-logo.svg                   # SVG logo mark
-├── .env.local                         # (NOT committed) env variables
-├── package.json
-├── tailwind.config.ts
-└── next.config.ts
-```
-
----
-
-## Environment Variables Required
-
-Create `.env.local` in project root:
-
-```bash
-# Supabase
-NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
-
-# Resend
-RESEND_API_KEY=your_resend_api_key
-
-# App
-NEXT_PUBLIC_APP_URL=https://your-vercel-url.vercel.app
-```
-
-Get these from:
-- Supabase: https://supabase.com/dashboard/project/nhgwjshndtoudvmrzhup/settings/api
-- Resend: https://resend.com/api-keys
-
----
-
-## Supabase Setup
-
-Run this SQL in the Supabase SQL editor to create the subscribers table:
-
-```sql
-create table subscribers (
-  id uuid default gen_random_uuid() primary key,
-    email text unique not null,
-      created_at timestamp with time zone default timezone('utc'::text, now()) not null,
-        source text default 'landing_page'
-        );
-
-        -- Enable RLS
-        alter table subscribers enable row level security;
-
-        -- Allow inserts from anon (landing page form)
-        create policy "Allow anon inserts" on subscribers
-          for insert with check (true);
-          ```
-
-          ---
-
-          ## Deployment
-
-          - **Vercel Project:** https://vercel.com/ahhdamndev/4-tp
-          - **GitHub Repo:** https://github.com/ahhdamnarchitect/4TP
-          - Connected: Vercel auto-deploys on push to `main`
-          - Add env variables in Vercel dashboard → Settings → Environment Variables
-
-          ---
-
-          ## Design Tokens Reference
-
-          | Token | Value | Usage |
-          |-------|-------|-------|
-          | Yellow | #FEEB3D | Primary accent, logo bg, CTA hover |
-          | Black | #000000 | Page background, logo "4" |
-          | White | #FFFFFF | Body text, form input text |
-          | Gray Dark | #111111 | Section backgrounds |
-          | Gray Mid | #1A1A1A | Card backgrounds |
-          | Inter Black | weight 900 | Hero headline |
-          | Inter Bold | weight 700 | Section headings |
-          | Inter Regular | weight 400 | Body copy |
-
-          ---
-
-          ## Phase Checklist
-
-          ### Phase 1 — Landing Page
-          - [x] README finalized
-          - [x] Research documented
-          - [x] Progress tracking set up
-          - [x] File structure planned
-          - [ ] Next.js project initialized locally
-          - [x] app/layout.tsx created
-          - [x] app/page.tsx created (landing page)
-          - [x] app/globals.css created
-          - [x] app/api/subscribe/route.ts created
-          - [x] components/LogoIntro.tsx created
-          - [x] components/HeroSection.tsx created
-          - [x] components/EmailForm.tsx created
-          - [x] tailwind.config.ts created with brand tokens
-          - [ ] Supabase subscribers table created
-          - [ ] .env.local configured (local only)
-          - [ ] Resend API key set
-          - [ ] Test email flow locally
-          - [ ] Deploy to Vercel
-          - [ ] Verify live URL
-
-          ### Phase 2 — Event Registration (July/August 2026)
-          - [ ] TBD
-
-          ### Phase 3 — Products (TBD)
-          - [ ] TBD
-
-          ### Phase 4 — Media Platform (TBD)
-          - [ ] TBD
+> > Last Updated: March 20, 2026
+> >
+> > ---
+> >
+> > ## Current Status: Phase 1 — Landing Page IN PROGRESS
+> >
+> > ---
+> >
+> > ## Session Log
+> >
+> > ### Session 1 — March 20, 2026
+> > **What was done:**
+> > - Initial project setup and strategy (Claude consultation)
+> > - - README.md created with full project brief, tech stack, phases
+> >   - - Vercel project connected: https://vercel.com/ahhdamndev/4-tp
+> >     - - Supabase project created: https://supabase.com/dashboard/project/nhgwjshndtoudvmrzhup
+> >       - - Resend account connected
+> >         - - 2026 web design trends researched
+> >           - - docs/DESIGN_RESEARCH.md created
+> >             - - docs/PROGRESS.md created
+> >               - - All core app files created: package.json, tailwind.config.ts, tsconfig.json, .gitignore
+> >                 - - App router files: app/layout.tsx, app/page.tsx, app/globals.css
+> >                   - - Components: LogoIntro.tsx, HeroSection.tsx, EmailForm.tsx
+> >                     - - API route: app/api/subscribe/route.ts (Supabase + Resend pipeline)
+> >                       - - next.config.ts created (MISTAKE — wrong extension for Next.js 14)
+> >                         - - next.config.mjs created (FIX for deployment error)
+> >                           - - Supabase subscribers table SQL prepared
+> >                            
+> >                             - **What was decided:**
+> >                             - - Stack: Next.js 14 App Router, Tailwind, Framer Motion, Supabase, Resend, Vercel
+> >                               - - Animation: Yellow square morphs → reveals full 4TP logo (OuiOui001 pacing)
+> >                                 - - Font: Inter (Google Fonts)
+> >                                   - - Colors: #F5C842 yellow, #0A0A0A black, #FAFAFA white
+> >                                    
+> >                                     - **What's next:**
+> >                                     - - Delete next.config.ts from repo
+> >                                       - - Run Supabase SQL to create subscribers table
+> >                                         - - Set Vercel env vars (Supabase + Resend)
+> >                                           - - Verify deployment passes
+> >                                            
+> >                                             - ---
+> >
+> > ### Session 2 — March 20, 2026
+> > **What was done:**
+> > - Confirmed Supabase subscribers table was already created (SQL ran successfully)
+> > - - Diagnosed Vercel deployment failure: next.config.ts not supported by Next.js 14
+> >   - - next.config.mjs committed as the fix
+> >     - - Navigated to Vercel env vars page — confirmed empty
+> >       - - Navigated to Supabase API Keys — found anon key (partially visible)
+> >         - - Navigated to Supabase Integrations — clicked Install Vercel Integration
+> >           - - Answered: how to get other AIs to update progress files → create docs/AI_INSTRUCTIONS.md
+> >            
+> >             - **Status at end of session:**
+> >             - - next.config.mjs committed ✅
+> >               - - next.config.ts still in repo ❌ (conflict risk)
+> >                 - - Supabase→Vercel integration: new tab opened, flow not completed ❌
+> >                   - - RESEND_API_KEY not yet in Vercel ❌
+> >                     - - docs/AI_INSTRUCTIONS.md not yet created ❌
+> >                      
+> >                       - ---
+> >
+> > ### Session 3 — March 20, 2026
+> > **What was done:**
+> > - ✅ Completed Supabase → Vercel native integration (AhhdamnDev team linked, 4TP→4-tp project connected)
+> > - - ✅ Verified all Supabase env vars auto-injected into Vercel: NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_ANON_KEY, SUPABASE_SERVICE_ROLE_KEY, SUPABASE_JWT_SECRET, SUPABASE_PUBLISHABLE_KEY, POSTGRES_URL, etc.
+> >   - - ✅ Created new Resend API key: "4TP Production" (Full access)
+> >     - - ✅ Added RESEND_API_KEY to Vercel environment variables (All Environments)
+> >       - - ✅ Deleted next.config.ts from repo (commit: fix: remove next.config.ts — incompatible with Next.js 14)
+> >         - - ✅ Created docs/AI_INSTRUCTIONS.md — standing protocol for all AI assistants
+> >           - - ✅ Updated docs/PROGRESS.md (this file) — Session 3 entry
+> >             - - ⏳ Vercel redeploy triggered by deletion of next.config.ts — status: in progress
+> >              
+> >               - **What's blocked:**
+> >               - - Nothing currently blocked. All env vars are set. Deployment should pass on next trigger.
+> >                
+> >                 - **What's next (Session 4):**
+> >                 - - Verify Vercel deployment passes (check https://vercel.com/ahhdamndev/4-tp)
+> >                   - - Test the live site: https://4-tp.vercel.app
+> >                     - - Test email signup form — confirm Supabase insert + Resend email works
+> >                       - - Refine LogoIntro.tsx animation (yellow square → full logo morph, OuiOui001 timing)
+> >                         - - Refine HeroSection.tsx copy and layout
+> >                           - - Add mobile responsiveness pass
+> >                             - - Test all breakpoints
+> >                              
+> >                               - ---
+> >
+> > ## Phase Checklist
+> >
+> > ### Phase 1: Landing Page + Waitlist
+> > - [x] README.md created
+> > - [ ] - [x] Vercel project setup
+> > - [ ] - [x] Supabase project setup
+> > - [ ] - [x] Resend account setup
+> > - [ ] - [x] Core file structure created
+> > - [ ] - [x] package.json with all deps
+> > - [ ] - [x] Tailwind config with brand tokens
+> > - [ ] - [x] app/layout.tsx
+> > - [ ] - [x] app/page.tsx
+> > - [ ] - [x] app/globals.css
+> > - [ ] - [x] components/LogoIntro.tsx
+> > - [ ] - [x] components/HeroSection.tsx
+> > - [ ] - [x] components/EmailForm.tsx
+> > - [ ] - [x] app/api/subscribe/route.ts
+> > - [ ] - [x] next.config.mjs (deployment fix)
+> > - [ ] - [x] next.config.ts DELETED
+> > - [ ] - [x] Supabase subscribers table created
+> > - [ ] - [x] Supabase → Vercel integration active
+> > - [ ] - [x] RESEND_API_KEY added to Vercel
+> > - [ ] - [x] All env vars set in Vercel
+> > - [ ] - [x] docs/AI_INSTRUCTIONS.md created
+> > - [ ] - [ ] Vercel deployment GREEN confirmed
+> > - [ ] - [ ] Live site tested end-to-end
+> > - [ ] - [ ] Email form tested (Supabase insert + Resend send)
+> > - [ ] - [ ] Logo animation polished
+> > - [ ] - [ ] Mobile responsiveness verified
+> >
+> > - [ ] ### Phase 2: Design Polish (Next)
+> > - [ ] - [ ] Custom cursor
+> > - [ ] - [ ] Scroll-triggered animations
+> > - [ ] - [ ] Parallax sections
+> > - [ ] - [ ] Performance optimization
+> > - [ ] - [ ] Accessibility audit
+> >
+> > - [ ] ### Phase 3: Content + Launch
+> > - [ ] - [ ] Final copy review with client
+> > - [ ] - [ ] Social preview meta tags
+> > - [ ] - [ ] Custom domain setup
+> > - [ ] - [ ] Analytics (privacy-first)
+> > - [ ] - [ ] Launch
+> >
+> > - [ ] ---
+> >
+> > - [ ] ## File Structure
+> >
+> > - [ ] ```
+> > - [ ] 4TP/
+> > - [ ] ├── app/
+> > - [ ] │   ├── api/
+> > - [ ] │   │   └── subscribe/
+> > - [ ] │   │       └── route.ts        # POST /api/subscribe (Supabase + Resend)
+> > - [ ] │   ├── globals.css             # Brand tokens, base styles
+> > - [ ] │   ├── layout.tsx              # Root layout, Inter font
+> > - [ ] │   └── page.tsx                # Main landing page
+> > - [ ] ├── components/
+> > - [ ] │   ├── LogoIntro.tsx           # Animated logo intro (yellow square → 4TP)
+> > - [ ] │   ├── HeroSection.tsx         # Hero with email capture CTA
+> > - [ ] │   └── EmailForm.tsx           # Email input + submit + loading states
+> > - [ ] ├── docs/
+> > - [ ] │   ├── AI_INSTRUCTIONS.md      # Standing protocol for all AI sessions
+> > - [ ] │   ├── DESIGN_RESEARCH.md      # 2026 trends, animation plan, design system
+> > - [ ] │   └── PROGRESS.md             # This file — project state tracker
+> > - [ ] ├── .gitignore
+> > - [ ] ├── next.config.mjs             # Next.js 14 config (ESM)
+> > - [ ] ├── package.json
+> > - [ ] ├── README.md
+> > - [ ] ├── tailwind.config.ts
+> > - [ ] └── tsconfig.json
+> > - [ ] ```
+> >
+> > - [ ] ---
+> >
+> > - [ ] ## Environment Variables
+> >
+> > - [ ] All set in Vercel. Source: Supabase-Vercel integration (auto-synced) + manual Resend.
+> >
+> > - [ ] | Variable | Source | Status |
+> > - [ ] |----------|--------|--------|
+> > - [ ] | NEXT_PUBLIC_SUPABASE_URL | Supabase integration | ✅ Set |
+> > - [ ] | NEXT_PUBLIC_SUPABASE_ANON_KEY | Supabase integration | ✅ Set |
+> > - [ ] | SUPABASE_SERVICE_ROLE_KEY | Supabase integration | ✅ Set |
+> > - [ ] | SUPABASE_JWT_SECRET | Supabase integration | ✅ Set |
+> > - [ ] | SUPABASE_PUBLISHABLE_KEY | Supabase integration | ✅ Set |
+> > - [ ] | POSTGRES_URL | Supabase integration | ✅ Set |
+> > - [ ] | POSTGRES_PRISMA_URL | Supabase integration | ✅ Set |
+> > - [ ] | POSTGRES_URL_NON_POOLING | Supabase integration | ✅ Set |
+> > - [ ] | POSTGRES_USER | Supabase integration | ✅ Set |
+> > - [ ] | POSTGRES_HOST | Supabase integration | ✅ Set |
+> > - [ ] | POSTGRES_PASSWORD | Supabase integration | ✅ Set |
+> > - [ ] | POSTGRES_DATABASE | Supabase integration | ✅ Set |
+> > - [ ] | RESEND_API_KEY | Manual (Resend "4TP Production") | ✅ Set |
+> >
+> > - [ ] ---
+> >
+> > - [ ] ## Supabase SQL (Already Executed)
+> >
+> > - [ ] ```sql
+> > - [ ] CREATE TABLE IF NOT EXISTS subscribers (
+> > - [ ]   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+> > - [ ]     email TEXT UNIQUE NOT NULL,
+> > - [ ]   created_at TIMESTAMPTZ DEFAULT NOW(),
+> > - [ ]     source TEXT DEFAULT 'landing_page'
+> > - [ ] );
+> > - [ ] ```
+> >
+> > - [ ] Status: ✅ Table created and confirmed in Supabase SQL editor.
