@@ -151,3 +151,14 @@
 > > > > > > > >             - - **Loops.so:** https://loops.so
 > > > > > > > >               - - **Mux:** https://mux.com
 > > > > > > > >                 - - **Stripe:** https://stripe.com
+
+## Cursor Repo OS
+
+This repository uses a persistent brain workflow for resumable AI sessions.
+Core operating memory files live in `brain/`, and behavior rules live in
+`.cursor/rules/`. Future sessions should read and update brain files as part of
+normal implementation and debugging work.
+
+Bootstrap script:
+
+- `scripts/init-cursor-os.ps1` (recommended on this machine)

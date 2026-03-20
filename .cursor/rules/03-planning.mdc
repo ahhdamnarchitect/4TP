@@ -1,0 +1,11 @@
+---
+description: Enforce planning before large changes
+alwaysApply: true
+---
+
+For non-trivial tasks:
+- briefly plan before implementing
+- identify impacted files/modules
+- list risks and assumptions
+- update brain/next_steps.md if the work changes priorities
+- if the plan changes architecture or workflow, log it in brain/decisions.md

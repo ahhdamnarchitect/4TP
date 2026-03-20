@@ -1,0 +1,25 @@
+---
+description: Enforce persistent repo brain workflow
+alwaysApply: true
+---
+
+Before making any meaningful change, review:
+- brain/project_context.md
+- brain/current_state.md
+- brain/decisions.md
+- brain/next_steps.md
+
+When planning or implementing work:
+- align changes with the documented project context
+- preserve existing architecture unless intentionally changing it
+- note assumptions when context is missing
+- avoid blind edits without first understanding affected modules
+
+After any meaningful change:
+- update brain/current_state.md
+- append an entry to brain/change_log.md
+- update brain/next_steps.md
+- add a decision entry to brain/decisions.md if an architectural, tooling, or workflow choice was made
+
+If brain files do not exist, create them.
+Do not finish work without leaving the repo in a resumable state.
