@@ -1,145 +1,78 @@
-# 4TP — Design Research & 2026 Web Trends
+# 4TP - Design Research and Creative Direction
 
-> Last Updated: March 20, 2026
-> Purpose: Living research document. Update on every commit.
-
----
-
-## 2026 Web Design Trends (Researched March 2026)
-
-### Key Trends — Applied to 4TP
-
-**1. Immersive & Performance-Driven Experiences**
-The top sites of 2026 prioritize immersive, performance-driven experiences that blend AI-powered personalization with minimalist yet highly interactive, bold aesthetics. For 4TP: the landing page must feel like an experience, not a page.
-
-**2. Dark Mode as Default**
-Over 90% of users prefer dark mode. Dark backgrounds with high-contrast accent colors (like 4TP Yellow #FEEB3D on black) are the dominant aesthetic. 4TP's black + yellow palette is perfectly positioned for this.
-
-**3. Immersive High-Energy Layouts**
-Saturated colors combined with surreal 3D-adjacent elements and soft gradients create a futuristic, energetic feel. For 4TP: the yellow-on-black with kinetic typography hits this perfectly.
-
-**4. Guided Scroll Interactions**
-Scrolling is now used as a navigation tool, with progress indicators and interactive elements keeping users engaged. For 4TP: the landing page uses scroll-triggered reveals and sticky animations.
-
-**5. Purposeful Motion**
-Micro-interactions and animations are designed for utility — providing feedback, enhancing navigation — rather than just decoration. For 4TP: every animation has intent (the logo morph signals brand entry, the scroll reveals signal content depth).
-
-**6. Organic / Asymmetric Layouts**
-Moving away from strict grids. 2026 uses asymmetrical, organic layouts with curved dividers and soft shadows. For 4TP: the hero section breaks the grid with the oversized "4" as a design element.
-
-**7. Maximalist Nostalgia**
-Futuristic aesthetics blended with bold, opulent typographic choices. For 4TP: Inter Black at display sizes, mixed with editorial spacing.
-
-**8. Accessibility First**
-WCAG AA compliance, high-contrast ratios, and keyboard navigation are non-negotiable. The 4TP Yellow (#FEEB3D) on Black (#000000) exceeds WCAG AA contrast requirements.
-
-**9. Performance-First Design**
-Sites must load in under 3 seconds. Lightweight visuals, optimized assets, mobile-first. For 4TP: Next.js App Router + Vercel Edge = blazing fast.
-
-**10. AI-Driven Personalization**
-Chatbots, voice-activated interfaces, intelligent customization. Not applicable to Phase 1, but relevant to Phase 4 (media platform).
+- Last Updated: 2026-03-20
+- Purpose: Living design reference and implementation checklist for each session.
 
 ---
 
-## Reference Sites Analysis
+## 2026 Trend Signals Applied to 4TP
 
-### ComplexCon (complexcon.com)
-- **What works:** Full-bleed dark background, centered logo lockup, single CTA (email form), massive bold type
-- **Email form:** Clean input + inline button, no friction
-- **Apply to 4TP:** Mirror this structure. Hero = logo + tagline + email form. Nothing else.
-
-### OuiOui001 (ouioui001.com)
-- **What works:** Brand name animates in on page load — staggered letter reveal, editorial timing
-- **Animation feel:** Deliberate, slow, confident — not flashy
-- **Apply to 4TP:** The yellow square expands/morphs into the 4TP logo on load. Then the tagline fades in. Then the email form rises up.
-
-### Architectural Digest (architecturaldigest.com)
-- **What works:** High editorial standard, clean grid, sophisticated typography
-- **Apply to 4TP:** Typography hierarchy and spacing. The "below the fold" sections of the landing page use AD-style editorial spacing.
+1. **Immersive but fast**  
+   Build an experience-first hero while keeping performance budgets tight.
+2. **Dark-first interfaces**  
+   Use black base with high-contrast yellow accents for brand recognition.
+3. **Purposeful motion**  
+   Animation should communicate hierarchy and flow, not decoration.
+4. **Asymmetric editorial composition**  
+   Use confident type scale and broken-grid rhythm for premium identity.
+5. **Accessibility as baseline**  
+   Preserve high contrast, clear focus states, and keyboard-safe interactions.
 
 ---
 
-## Font Selection
+## Reference Direction
 
-### Primary: Inter
-- **Source:** https://rsms.me/inter/
-- **Weights used:** 900 (Black) for hero, 700 (Bold) for headings, 400 (Regular) for body
-- **Why:** Clean grotesque, highly legible, modern — aligns with ComplexCon and OuiOui references
-
-### Alternative Options (for client review):
-1. **Space Grotesk** — Similar to Inter but with more personality, slight geometric quirks. Good for a creative platform. Google Fonts.
-2. **Neue Haas Grotesk / Haas Unica** — Ultra-editorial, fashion-forward. Closest to what OuiOui uses. Consider for display headings.
-3. **DM Sans** — Clean, slightly more approachable than Inter. Good for body copy pairing. Google Fonts.
+- `ComplexCon`: minimal structure, bold hero, single clear CTA.
+- `OuiOui001`: pacing and confidence of logo reveal sequence.
+- `Architectural Digest`: editorial spacing and high-trust typography.
 
 ---
 
-## Animation Plan — Phase 1
+## Locked Visual System
 
-### Logo Entrance Sequence (OuiOui-style)
-```
-0ms     — Page loads, black screen
-200ms   — Yellow square fades in (small, centered)
-600ms   — Square morphs/expands via clip-path or SVG path animation
-1200ms  — Full 4TP logo mark revealed (bold "4" + "TP" text)
-1600ms  — Logo scales slightly and settles
-2000ms  — Tagline text fades in (staggered per word)
-2600ms  — Email form rises up from below
-3000ms  — CTA button pulses once
+- Font: Inter (`400`, `700`, `900`)
+- Core colors:
+  - `#F5C842` (brand yellow)
+  - `#0A0A0A` (brand black)
+  - `#FAFAFA` (brand white)
+- Brand animation requirement:
+  - Start with a **yellow square** (never a circle)
+  - Morph/expand into full 4TP logo treatment
+  - Timing should feel deliberate (OuiOui001-like)
+
+---
+
+## Animation Sequence (Target Timing)
+
+```text
+0ms    - black screen
+200ms  - yellow square appears, centered
+600ms  - square expands/morphs
+1200ms - 4TP mark fully revealed
+1800ms - brief hold
+2200ms - transition out to hero
+3000ms - hero fully interactive
 ```
 
-### Tech: GSAP or Framer Motion
-- **GSAP:** Best for the morphing shape animation (MorphSVG or clip-path tweens)
-- **Framer Motion:** Best for React component-level animations (form entrance, scroll reveals)
-- **Decision:** Use Framer Motion for all React component animations. Use CSS animations for the initial logo sequence (no JS dependency on first paint).
-
-### Scroll Interactions
-- Section reveals: Framer Motion `whileInView` with `viewport={{ once: true }}`
-- Parallax: CSS `transform: translateY()` on scroll event
-- Sticky elements: CSS `position: sticky`
+Implementation note: keep current Framer Motion approach unless performance or quality demands a targeted CSS/SVG refactor.
 
 ---
 
-## Color System
+## Current Product Notes
 
-```css
-/* 4TP Brand Colors */
---color-yellow: #FEEB3D;
---color-black: #000000;
---color-white: #FFFFFF;
---color-gray-dark: #111111;
---color-gray-mid: #1A1A1A;
---color-gray-light: #333333;
-
-/* Typography */
---font-primary: 'Inter', sans-serif;
-
-/* Spacing Scale (Tailwind) */
-/* Uses default Tailwind scale — no customization needed */
-```
+- Phase 1 scope remains: one high-impact landing page + waitlist capture.
+- Do not add paid tooling or subscription upgrades.
+- Keep stack unchanged (Next.js 14, Tailwind, Framer Motion, Supabase, Resend, Vercel).
 
 ---
 
-## Competitive Landscape Notes
+## Next Steps (Session-Driven Checklist)
 
-Sites that 4TP should aim to be compared to:
-- **A-COLD-WALL** (acoldwall.com) — Dark, editorial, fashion-culture hybrid
-- **Virgil Abloh archive sites** — Culture-forward, text-heavy, high contrast
-- **ComplexCon** — Event/culture brand, dark, bold
-- **Hypebeast** — Culture media, dark mode, editorial grid
-
-4TP is positioned in this cultural space: **education + streetwear culture aesthetic + media platform ambition**.
-
----
-
-## Next Steps (Updated per session)
-
-- [x] README updated (pricing removed, animation notes added)
-- [x] Design research documented
-- [ ] PROGRESS.md created
-- [ ] Next.js project scaffolded
-- [ ] Tailwind configured with brand tokens
-- [ ] Logo SVG created
-- [ ] Hero animation built
-- [ ] Email form wired to Supabase
-- [ ] Resend confirmation email template built
-- [ ] Deploy to Vercel
+- [x] Initial trend research captured
+- [x] Brand direction locked (dark + yellow, editorial tone)
+- [x] Logo intro concept implemented in code
+- [ ] Vercel deployment confirmed green after latest fixes (latest known blocker in `LogoIntro.tsx` has been fixed)
+- [ ] Validate intro pacing on desktop and mobile
+- [ ] Verify email form end-to-end (API, Supabase insert, Resend send)
+- [ ] Run mobile spacing and typography polish pass
+- [ ] Prepare phase 2 interaction layer (scroll reveals/parallax)

@@ -41,7 +41,6 @@
 
         return (
           <AnimatePresence>
-      {phase !== 'done' && (
               <motion.div
                 className="fixed inset-0 z-[100] flex items-center justify-center bg-black"
                 exit={{ y: '-100%' }}
@@ -108,7 +107,6 @@
             TP
           </motion.div>
         </motion.div>
-      )}
     </AnimatePresence>
   )
 }
