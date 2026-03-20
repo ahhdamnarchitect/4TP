@@ -1,3 +1,4 @@
+
 import type { Metadata } from 'next'
 import './globals.css'
 
@@ -38,10 +39,10 @@ export default function RootLayout({
                 <head>
                         <link rel="preconnect" href="https://rsms.me/" />
                         <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
-                </head>head>
+                </head>
                 <body className="bg-black text-white antialiased">
                   {children}
-                </body>body>
-          </html>html>
+                </body>
+          </html>
         )
-}</html>
+}
