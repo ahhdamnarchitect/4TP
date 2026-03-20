@@ -10,6 +10,36 @@
 ## Decisions
 Append entries below as relevant.
 
+- Date: 2026-03-20 (Session 6)
+- Decision: Rebuild HeroSection with solid black background — no background image.
+- Reason: `4TPCirclePppl.png` was blurry and had baked-in text watermarks making it unusable as a background. Solid black is cleaner and more editorial.
+- Alternatives Considered: Source a clean version of the image; use a different image.
+- Impact: Cleaner, faster-loading page. Image still in /public for potential future use.
+
+- Date: 2026-03-20 (Session 6)
+- Decision: Content in HeroSection is always visible (no `initial="hidden"` animation delays).
+- Reason: Previous approach used Framer Motion variants with 3.3s delays. If animation misfired, content stayed permanently invisible. LogoIntro overlay covers content until it exits — no animation dependency needed.
+- Alternatives Considered: Keep delayed reveal animations per element.
+- Impact: Reliable content visibility regardless of animation state. Page works even if JS fails to animate.
+
+- Date: 2026-03-20 (Session 6)
+- Decision: Created `Cursor.tsx` client component to drive `.custom-cursor` div with mouse position via JS.
+- Reason: `globals.css` had `cursor: none` and a `.custom-cursor` CSS class but no JS was moving the element — cursor was completely invisible.
+- Alternatives Considered: Remove custom cursor entirely; use CSS-only cursor tricks.
+- Impact: Custom yellow cursor now works correctly on desktop pointer devices.
+
+- Date: 2026-03-20 (Session 6)
+- Decision: LogoIntro uses a step-based integer state (0–4) + `done` boolean instead of string phase union.
+- Reason: Simpler to reason about, avoids string comparison bugs, cleaner conditional rendering.
+- Alternatives Considered: String phase enum ('init' | 'square' | 'expand' | 'logo' | 'exit' | 'gone').
+- Impact: More readable animation sequencing code.
+
+- Date: 2026-03-20 (Session 6)
+- Decision: Adopt ComplexCon-style layout — large display type fills viewport, two-column bottom, yellow accent rule, values ticker.
+- Reason: User explicitly requested the site feel like complexcon.com — bold, editorial, dark, event-brand energy.
+- Alternatives Considered: Previous centered layout with background image.
+- Impact: Strong brand presence. "MOVE FORWARD." headline dominates; email form remains accessible below the fold.
+
 - Date: 2026-03-20
 - Decision: Standardize Repo OS memory/rules/docs structure under `brain/`, `.cursor/rules/`, and `cursor-os/`.
 - Reason: Ensure future sessions can resume with minimal rediscovery cost.

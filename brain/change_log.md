@@ -9,6 +9,26 @@
 ---
 
 ## Entries
+
+- Date: 2026-03-20 (Session 6)
+- Change: Complete site rebuild — ComplexCon layout, working logo animation, cursor fix.
+- Files Modified:
+  - `components/LogoIntro.tsx` (complete rewrite — step-based animation, black overlay curtain)
+  - `components/HeroSection.tsx` (complete rewrite — solid black bg, always-visible content, complexcon layout)
+  - `components/Nav.tsx` (rewrite — cleaner markup, same fade-in behavior)
+  - `components/Cursor.tsx` (new — JS mouse tracker fixing invisible cursor bug)
+  - `app/page.tsx` (updated — adds Cursor component)
+  - `app/globals.css` (updated — .custom-cursor uses width/height transition, not scale)
+  - `public/4.png` (added — 4TP logo for LogoIntro animation)
+  - `public/4TPCirclePppl.png` (added — NOT used in UI; rejected due to baked-in text watermarks)
+  - `brain/current_state.md`
+  - `brain/decisions.md`
+  - `brain/next_steps.md`
+  - `brain/change_log.md`
+- Reason: Previous build had invisible cursor, content hidden by failed animation delays, blurry/broken background image, and layout not matching complexcon.com reference. Full rebuild resolved all issues.
+- Commits: `94c8832` (rebuild), `088656b` (first redesign attempt, prior iteration)
+- Deployment: `dpl_Q4dcFYLQBAq1mx4WQd96GPfJgQda` — READY — https://4-tp.vercel.app
+- Verified: ✅ Chrome browser — animation plays, content visible, cursor visible, email form accessible.
 - Date: 2026-03-20
 - Change: Added non-Windows collaborator guide and linked it from Cursor OS README.
 - Files Modified:
