@@ -3,15 +3,18 @@
 import EmailForm from './EmailForm'
 
 /**
- * HeroSection — ComplexCon-inspired dark editorial layout.
+ * HeroSection — ComplexCon-inspired, signup-focused layout.
  *
- * Design principles:
- * - Solid black background (no background image)
- * - Oversized display typography fills the viewport width
- * - Content is ALWAYS visible — LogoIntro overlay reveals it on exit
- * - Yellow (#FEEB3D) as the sole brand accent
- * - Two-column bottom split: copy + form on left, year stamp on right
- * - Thin yellow rule + values marquee at the bottom
+ * Visual hierarchy (top → bottom):
+ *   1. Eyebrow (pillars)
+ *   2. "MOVE FORWARD." — supportive headline, not dominant
+ *   3. Tagline copy
+ *   4. ★ EMAIL FORM — the focal point of the page ★
+ *   5. Caption
+ *   6. Yellow rule + values marquee
+ *
+ * Everything is center-aligned. Form sits in the lower visual center,
+ * where the eye naturally lands — mirroring ComplexCon's structure.
  */
 
 const VALUES = ['EDUCATION', 'INSPIRATION', 'DISCIPLINE', 'INNOVATION', 'MOVE FORWARD']
@@ -20,136 +23,110 @@ export default function HeroSection() {
   return (
     <section
       style={{
-        minHeight: '100vh',
+        minHeight: '100dvh',
         background: '#000',
         display: 'flex',
         flexDirection: 'column',
+        alignItems: 'center',
         fontFamily: 'Inter, InterVariable, system-ui, sans-serif',
+        overflowX: 'hidden',
+        width: '100%',
+        boxSizing: 'border-box',
       }}
       aria-label="4TP Hero"
     >
-      {/* ── Main hero body ── */}
+      {/* ── Main centered content ── */}
       <div
         style={{
           flex: 1,
           display: 'flex',
           flexDirection: 'column',
-          justifyContent: 'space-between',
-          padding: 'clamp(6rem, 10vw, 9rem) clamp(1.5rem, 5vw, 5rem) clamp(2rem, 4vw, 3.5rem)',
-          maxWidth: '1600px',
+          alignItems: 'center',
+          justifyContent: 'center',
+          textAlign: 'center',
           width: '100%',
-          margin: '0 auto',
+          maxWidth: '720px',
+          padding: 'clamp(5.5rem, 12vw, 8rem) clamp(1.25rem, 5vw, 2.5rem) clamp(2rem, 5vw, 3rem)',
           boxSizing: 'border-box',
+          gap: '0',
         }}
       >
-
-        {/* ── Eyebrow line ── */}
+        {/* Eyebrow */}
         <p
           style={{
-            color: 'rgba(255,255,255,0.3)',
-            fontSize: '0.68rem',
+            color: 'rgba(255,255,255,0.28)',
+            fontSize: 'clamp(0.6rem, 1.8vw, 0.7rem)',
             letterSpacing: '0.32em',
             textTransform: 'uppercase',
-            marginBottom: '2rem',
+            marginBottom: 'clamp(1.5rem, 4vw, 2.5rem)',
           }}
         >
           Education &nbsp;·&nbsp; Inspiration &nbsp;·&nbsp; Discipline &nbsp;·&nbsp; Innovation
         </p>
 
-        {/* ── Display headline ── */}
-        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-          <h1
-            style={{
-              fontWeight: 900,
-              fontSize: 'clamp(4.5rem, 14.5vw, 17rem)',
-              lineHeight: 0.88,
-              letterSpacing: '-0.03em',
-              color: '#fff',
-              textTransform: 'uppercase',
-              margin: 0,
-            }}
-          >
-            MOVE
-            <br />
-            <span style={{ color: '#FEEB3D' }}>FORWARD.</span>
-          </h1>
-        </div>
-
-        {/* ── Bottom row: copy + form | year stamp ── */}
-        <div
+        {/* Headline — secondary supporting role */}
+        <h1
           style={{
-            display: 'flex',
-            alignItems: 'flex-end',
-            justifyContent: 'space-between',
-            gap: '3rem',
-            flexWrap: 'wrap',
-            marginTop: '3rem',
+            fontWeight: 900,
+            fontSize: 'clamp(2.8rem, 9vw, 7.5rem)',
+            lineHeight: 0.9,
+            letterSpacing: '-0.03em',
+            color: '#fff',
+            textTransform: 'uppercase',
+            margin: 0,
+            marginBottom: 'clamp(1.25rem, 3vw, 2rem)',
           }}
         >
-          {/* Left: description + email form */}
-          <div style={{ maxWidth: '420px', flex: '1 1 300px' }}>
-            {/* Yellow rule */}
-            <div
-              style={{
-                width: '48px',
-                height: '2px',
-                background: '#FEEB3D',
-                marginBottom: '1.5rem',
-              }}
-            />
+          MOVE{' '}
+          <span style={{ color: '#FEEB3D' }}>FORWARD.</span>
+        </h1>
 
-            <p
-              style={{
-                color: 'rgba(255,255,255,0.45)',
-                fontSize: '0.95rem',
-                lineHeight: 1.65,
-                marginBottom: '1.75rem',
-                fontWeight: 300,
-              }}
-            >
-              A creative network for those who push boundaries,
-              challenge perspectives, and move through life with purpose.
-            </p>
+        {/* Tagline */}
+        <p
+          style={{
+            color: 'rgba(255,255,255,0.38)',
+            fontSize: 'clamp(0.8rem, 2.2vw, 1rem)',
+            lineHeight: 1.7,
+            fontWeight: 300,
+            maxWidth: '440px',
+            marginBottom: 'clamp(2rem, 5vw, 3rem)',
+          }}
+        >
+          A creative network built to inspire, push boundaries, and empower
+          individuals to move forward with clarity and purpose.
+        </p>
 
-            <EmailForm />
-
-            <p
-              style={{
-                color: 'rgba(255,255,255,0.15)',
-                fontSize: '0.65rem',
-                letterSpacing: '0.18em',
-                textTransform: 'uppercase',
-                marginTop: '0.75rem',
-              }}
-            >
-              Join the network — be first to know
-            </p>
-          </div>
-
-          {/* Right: large faded year */}
-          <div
-            style={{
-              fontWeight: 900,
-              fontSize: 'clamp(5rem, 12vw, 11rem)',
-              lineHeight: 1,
-              letterSpacing: '-0.05em',
-              color: 'rgba(255,255,255,0.04)',
-              userSelect: 'none',
-              flexShrink: 0,
-            }}
-            aria-hidden="true"
-          >
-            2026
-          </div>
+        {/* ── EMAIL FORM — FOCAL POINT ── */}
+        <div
+          style={{
+            width: '100%',
+            maxWidth: '520px',
+          }}
+        >
+          <EmailForm />
         </div>
+
+        {/* Caption */}
+        <p
+          style={{
+            color: 'rgba(255,255,255,0.18)',
+            fontSize: '0.62rem',
+            letterSpacing: '0.2em',
+            textTransform: 'uppercase',
+            marginTop: '1rem',
+          }}
+        >
+          Join the network — be first to know
+        </p>
       </div>
 
       {/* ── Yellow accent rule ── */}
       <div
         style={{
-          height: '2px',
+          width: 'calc(100% - clamp(2.5rem, 10vw, 10rem))',
+          height: '1.5px',
           background: '#FEEB3D',
-          margin: '0 clamp(1.5rem, 5vw, 5rem)',
+          flexShrink: 0,
         }}
       />
 
@@ -157,8 +134,10 @@ export default function HeroSection() {
       <div
         style={{
           overflow: 'hidden',
-          padding: '1rem 0',
+          padding: '0.85rem 0',
+          width: '100%',
           borderBottom: '1px solid rgba(255,255,255,0.05)',
+          flexShrink: 0,
         }}
       >
         <div className="marquee-track">
@@ -166,9 +145,9 @@ export default function HeroSection() {
             <span
               key={i}
               style={{
-                margin: '0 2.5rem',
+                margin: '0 2rem',
                 color: 'rgba(255,255,255,0.18)',
-                fontSize: '0.65rem',
+                fontSize: '0.6rem',
                 letterSpacing: '0.32em',
                 textTransform: 'uppercase',
                 fontWeight: 500,
