@@ -1,6 +1,7 @@
 'use client'
 
 import EmailForm from './EmailForm'
+import HeroBackground from './HeroBackground'
 
 /**
  * HeroSection — ComplexCon-inspired, signup-focused layout.
@@ -23,6 +24,7 @@ export default function HeroSection() {
   return (
     <section
       style={{
+        position: 'relative',       // Required: anchors HeroBackground's absolute inset-0
         minHeight: '100dvh',
         background: '#000',
         display: 'flex',
@@ -35,9 +37,14 @@ export default function HeroSection() {
       }}
       aria-label="4TP Hero"
     >
-      {/* ── Main centered content ── */}
+      {/* ── Animated background layer (z-0, behind all content) ── */}
+      <HeroBackground />
+
+      {/* ── Main centered content (z-1, in front of background) ── */}
       <div
         style={{
+          position: 'relative',
+          zIndex: 1,
           flex: 1,
           display: 'flex',
           flexDirection: 'column',
@@ -107,6 +114,8 @@ export default function HeroSection() {
       {/* ── Yellow accent rule ── */}
       <div
         style={{
+          position: 'relative',
+          zIndex: 1,
           width: 'calc(100% - clamp(2.5rem, 10vw, 10rem))',
           height: '1.5px',
           background: '#FEEB3D',
@@ -117,6 +126,8 @@ export default function HeroSection() {
       {/* ── Values marquee ── */}
       <div
         style={{
+          position: 'relative',
+          zIndex: 1,
           overflow: 'hidden',
           padding: '0.85rem 0',
           width: '100%',
