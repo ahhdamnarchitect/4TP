@@ -1,31 +1,34 @@
 'use client'
 
 /**
- * HeroBackground — Cinematic silhouette that responds to:
- *   Desktop: base auto-spin + scroll velocity burst + mouse parallax
- *   Mobile:  base auto-spin + device gyroscope (gamma tilt = left/right rotation)
+ * HeroBackground — Cinematic silhouette background layer.
  *
- * IMPORTANT: Uses native requestAnimationFrame — NOT Framer Motion's
- * useAnimationFrame — to avoid starving Framer Motion's animation scheduler,
- * which broke the Nav fade-in and LogoIntro when both ran concurrently.
- * DOM transform is applied directly via ref to bypass React rendering entirely.
+ * INTERACTIONS:
+ *   Desktop  — mouse wheel (up/down) drives rotation burst (not cursor position)
+ *   Mobile   — device gyroscope (left/right tilt) rotates the image ±30°
+ *              haptic feedback fires on Android Chrome when crossing tilt thresholds
+ *              iOS 13+ requests DeviceOrientationEvent permission on first touch
  *
- * VISUAL:
- *   brightness(3) contrast(2) — boosts subtle tonal differences in the dark
- *   image so the silhouette lifts above the black background.
- *   mix-blend-mode: screen — near-black → transparent; lighter → visible.
- *   No invert() — that was making the entire image rectangle glow as a square.
- *   Radial gradient mask fades the edges so the rotating corners never peek in.
+ * NOTE ON HAPTICS:
+ *   navigator.vibrate() is supported on Android Chrome.
+ *   iOS Safari has no web vibration API — haptics are Android-only on web.
+ *
+ * NOTE ON SCHEDULER:
+ *   Uses native requestAnimationFrame (NOT Framer Motion's useAnimationFrame)
+ *   to avoid starving Framer Motion's animation scheduler which would break
+ *   the LogoIntro and Nav fade-in animations running concurrently.
+ *   Rotation is applied directly via ref.style.transform — zero React renders.
  */
 
 import Image from 'next/image'
 import { useRef, useEffect } from 'react'
 
-const BASE_DEG_PER_MS = 360 / 75_000  // 1 full revolution per 75 seconds
-const SCROLL_SCALE     = 18            // how much scroll velocity (px/ms) → degrees
-const SCROLL_DECAY     = 0.90          // how fast scroll influence fades per frame
-const POINTER_MAX_DEG  = 14            // max ±° from mouse horizontal position
-const GYRO_MAX_DEG     = 28            // max ±° from device tilt (gamma)
+const BASE_DEG_PER_MS  = 360 / 75_000  // 1 full revolution per 75 seconds
+const WHEEL_SCALE      = 0.25           // wheel deltaY (px) → degrees
+const SCROLL_DECAY     = 0.93           // per-frame velocity decay (closer to 1 = longer coast)
+const GYRO_MAX_DEG     = 30             // ±° rotation from full left/right device tilt
+const HAPTIC_SOFT_DEG  = 12             // gamma threshold for soft haptic pulse
+const HAPTIC_HARD_DEG  = 22             // gamma threshold for strong haptic pulse
 
 export default function HeroBackground() {
   const wrapperRef = useRef<HTMLDivElement>(null)
@@ -35,51 +38,85 @@ export default function HeroBackground() {
     if (!el) return
 
     let rafId: number
-    let baseAngle      = 0
+    let baseAngle       = 0
     let scrollInfluence = 0
-    let pointerOffset  = 0   // desktop: mouse horizontal parallax
-    let gyroOffset     = 0   // mobile:  device tilt
-    let lastScrollY    = window.scrollY
-    let lastScrollTime = performance.now()
+    let gyroOffset      = 0
     let lastFrameTime: number | null = null
+    let lastGamma       = 0
 
-    // ── Scroll (desktop, page-level) ──────────────────────────────────────
-    const onScroll = () => {
-      const now = performance.now()
-      const dt  = now - lastScrollTime
-      const dy  = window.scrollY - lastScrollY
-      if (dt > 0) {
-        const velocity = dy / dt                   // px/ms
-        scrollInfluence += velocity * SCROLL_SCALE // accumulate burst
-      }
-      lastScrollY    = window.scrollY
-      lastScrollTime = now
+    // ── Mouse wheel (desktop) ─────────────────────────────────────────────
+    // deltaY > 0 = scrolling DOWN = clockwise
+    // deltaY < 0 = scrolling UP   = counter-clockwise
+    const onWheel = (e: WheelEvent) => {
+      scrollInfluence += e.deltaY * WHEEL_SCALE
     }
 
-    // ── Mouse parallax (desktop only) ─────────────────────────────────────
-    const onPointerMove = (e: PointerEvent) => {
-      if (e.pointerType !== 'mouse') return
-      const cx = window.innerWidth / 2
-      const nx = (e.clientX - cx) / cx            // −1 → +1
-      pointerOffset = nx * POINTER_MAX_DEG
-    }
-
-    // ── Gyroscope (mobile) ────────────────────────────────────────────────
-    // gamma = left/right tilt: –90° (tilt left) → +90° (tilt right)
+    // ── Device orientation / gyroscope (mobile) ───────────────────────────
+    // gamma = device left/right tilt: -90 (full left) → +90 (full right)
     const onOrientation = (e: DeviceOrientationEvent) => {
-      const gamma   = e.gamma ?? 0
+      const gamma = e.gamma ?? 0
       gyroOffset = (gamma / 90) * GYRO_MAX_DEG
+
+      // Haptic feedback on threshold crossings (Android Chrome only)
+      if (navigator.vibrate) {
+        const prev = lastGamma
+        const curr = gamma
+
+        // Soft pulse at ±HAPTIC_SOFT_DEG
+        const crossedSoft =
+          (prev > -HAPTIC_SOFT_DEG && curr <= -HAPTIC_SOFT_DEG) ||
+          (prev < -HAPTIC_SOFT_DEG && curr >= -HAPTIC_SOFT_DEG) ||
+          (prev < HAPTIC_SOFT_DEG  && curr >= HAPTIC_SOFT_DEG)  ||
+          (prev > HAPTIC_SOFT_DEG  && curr <= HAPTIC_SOFT_DEG)
+
+        // Hard pulse at ±HAPTIC_HARD_DEG
+        const crossedHard =
+          (prev > -HAPTIC_HARD_DEG && curr <= -HAPTIC_HARD_DEG) ||
+          (prev < -HAPTIC_HARD_DEG && curr >= -HAPTIC_HARD_DEG) ||
+          (prev < HAPTIC_HARD_DEG  && curr >= HAPTIC_HARD_DEG)  ||
+          (prev > HAPTIC_HARD_DEG  && curr <= HAPTIC_HARD_DEG)
+
+        if (crossedHard)      navigator.vibrate([20, 10, 20])  // double tap feel
+        else if (crossedSoft) navigator.vibrate(10)             // single soft pulse
+      }
+
+      lastGamma = gamma
     }
 
-    // ── Main animation loop (native RAF, not Framer Motion) ───────────────
+    // ── iOS 13+ gyroscope permission ──────────────────────────────────────
+    // requestPermission() MUST be called from a user gesture (touch/tap).
+    // Android and most non-iOS devices don't need this — listener works directly.
+    const addOrientationListener = () => {
+      window.addEventListener('deviceorientation', onOrientation, { passive: true })
+    }
+
+    const requestiOSPermission = async () => {
+      try {
+        const DOE = DeviceOrientationEvent as unknown as {
+          requestPermission?: () => Promise<'granted' | 'denied'>
+        }
+        if (typeof DOE.requestPermission === 'function') {
+          const result = await DOE.requestPermission()
+          if (result === 'granted') addOrientationListener()
+        } else {
+          // Android / non-iOS — no permission needed
+          addOrientationListener()
+        }
+      } catch {
+        // Fallback: add listener anyway, event simply won't fire if denied
+        addOrientationListener()
+      }
+    }
+
+    // ── Animation loop (native RAF) ───────────────────────────────────────
     const tick = (time: number) => {
       const delta   = lastFrameTime != null ? time - lastFrameTime : 0
       lastFrameTime = time
 
-      baseAngle      += BASE_DEG_PER_MS * delta    // constant slow drift
-      scrollInfluence *= SCROLL_DECAY              // decay scroll burst
+      baseAngle       += BASE_DEG_PER_MS * delta  // constant slow clockwise drift
+      scrollInfluence *= SCROLL_DECAY              // velocity decay
 
-      const angle = baseAngle + scrollInfluence + pointerOffset + gyroOffset
+      const angle = baseAngle + scrollInfluence + gyroOffset
       el.style.transform = `rotate(${angle}deg)`
 
       rafId = requestAnimationFrame(tick)
@@ -87,15 +124,29 @@ export default function HeroBackground() {
 
     rafId = requestAnimationFrame(tick)
 
-    window.addEventListener('scroll',          onScroll,      { passive: true })
-    window.addEventListener('pointermove',     onPointerMove, { passive: true })
-    window.addEventListener('deviceorientation', onOrientation, { passive: true })
+    // Wheel: desktop scroll-driven rotation
+    window.addEventListener('wheel', onWheel, { passive: true })
+
+    // iOS: request on first touch; Android: add listener immediately
+    const DOE = DeviceOrientationEvent as unknown as {
+      requestPermission?: () => Promise<string>
+    }
+    if (typeof DOE.requestPermission === 'function') {
+      // iOS 13+ — needs user gesture
+      window.addEventListener('touchstart', requestiOSPermission, {
+        once: true,
+        passive: true,
+      })
+    } else {
+      // Android / desktop — just add listener
+      addOrientationListener()
+    }
 
     return () => {
       cancelAnimationFrame(rafId)
-      window.removeEventListener('scroll',           onScroll)
-      window.removeEventListener('pointermove',      onPointerMove)
+      window.removeEventListener('wheel', onWheel)
       window.removeEventListener('deviceorientation', onOrientation)
+      window.removeEventListener('touchstart', requestiOSPermission)
     }
   }, [])
 
@@ -103,42 +154,43 @@ export default function HeroBackground() {
     <div
       aria-hidden="true"
       style={{
-        position : 'absolute',
-        inset    : 0,
-        zIndex   : 0,
-        pointerEvents: 'none',
-        overflow : 'hidden',
-        display  : 'flex',
+        position      : 'absolute',
+        inset         : 0,
+        zIndex        : 0,
+        pointerEvents : 'none',
+        overflow      : 'hidden',
+        display       : 'flex',
         alignItems    : 'center',
         justifyContent: 'center',
-        // Radial mask: center visible → transparent edges
-        // Prevents rotating corners from ever clipping into the viewport
-        WebkitMaskImage: 'radial-gradient(ellipse 65% 62% at 50% 52%, black 5%, transparent 100%)',
-        maskImage       : 'radial-gradient(ellipse 65% 62% at 50% 52%, black 5%, transparent 100%)',
+        // Radial gradient mask: large visible center that fades at edges.
+        // Percentages are relative to this container (viewport-sized).
+        // 75%/85% makes the visible circle extend close to viewport edges
+        // before fading — matching the user's gray reference lines.
+        WebkitMaskImage: 'radial-gradient(ellipse 75% 85% at 50% 52%, black 20%, transparent 100%)',
+        maskImage       : 'radial-gradient(ellipse 75% 85% at 50% 52%, black 20%, transparent 100%)',
       }}
     >
       <div
         ref={wrapperRef}
         style={{
-          width    : 'min(115vw, 115vh)',
-          height   : 'min(115vw, 115vh)',
+          // max() ensures it always extends BEYOND the viewport on both axes.
+          // On landscape desktop (1600×731): max(1600*1.3, 731*1.3) = 2080px
+          // The image is clipped by overflow:hidden + mask — corners never show.
+          width    : 'max(130vw, 130vh)',
+          height   : 'max(130vw, 130vh)',
           position : 'relative',
           flexShrink: 0,
           willChange: 'transform',
         }}
       >
         <Image
-          src="/hero-silhouette.png"
+          src="/hero-silhouette-2.png"
           alt=""
           fill
           priority
           draggable={false}
           style={{
-            objectFit: 'contain',
-            // brightness boosts subtle tonal difference → silhouette lifts above black bg
-            // contrast pushes near-black areas back to pure black → transparent via screen
-            // screen blend: black = invisible, lighter = shows through
-            // No invert() — invert was making the entire rectangle glow as a visible square
+            objectFit   : 'contain',
             filter      : 'brightness(4) contrast(2.2) blur(0.5px)',
             opacity     : 0.18,
             mixBlendMode: 'screen',
