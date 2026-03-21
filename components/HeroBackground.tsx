@@ -1,96 +1,130 @@
 'use client'
 
 /**
- * HeroBackground — Slow-spinning silhouette that responds to scroll velocity.
+ * HeroBackground — Cinematic silhouette that responds to:
+ *   Desktop: base auto-spin + scroll velocity burst + mouse parallax
+ *   Mobile:  base auto-spin + device gyroscope (gamma tilt = left/right rotation)
  *
- * ROTATION LOGIC:
- *   baseAngle  — accumulates at a fixed rate (1 rev / 70 seconds). Always running.
- *   influence  — derived from smoothed scroll velocity. Positive velocity (scroll
- *                down) pushes the rotation clockwise; negative (scroll up) pushes
- *                counterclockwise. Springs back to 0 when scrolling stops, letting
- *                the base take over again seamlessly.
- *   final      — rotate.set(baseAngle + influence), applied every animation frame.
+ * IMPORTANT: Uses native requestAnimationFrame — NOT Framer Motion's
+ * useAnimationFrame — to avoid starving Framer Motion's animation scheduler,
+ * which broke the Nav fade-in and LogoIntro when both ran concurrently.
+ * DOM transform is applied directly via ref to bypass React rendering entirely.
  *
- * The spring on scrollVelocity prevents the jitter you'd get from raw px/s values
- * and gives a natural ease-in/ease-out feel to the scroll burst.
- *
- * GPU path: Framer Motion drives transform: rotate() via a MotionValue, keeping
- * everything off the main thread with will-change: transform.
+ * VISUAL:
+ *   brightness(3) contrast(2) — boosts subtle tonal differences in the dark
+ *   image so the silhouette lifts above the black background.
+ *   mix-blend-mode: screen — near-black → transparent; lighter → visible.
+ *   No invert() — that was making the entire image rectangle glow as a square.
+ *   Radial gradient mask fades the edges so the rotating corners never peek in.
  */
 
 import Image from 'next/image'
-import { useRef } from 'react'
-import {
-  motion,
-  useScroll,
-  useVelocity,
-  useSpring,
-  useAnimationFrame,
-  useMotionValue,
-} from 'framer-motion'
+import { useRef, useEffect } from 'react'
 
-// Degrees per millisecond for the base auto-spin (one revolution per 70 seconds)
-const BASE_DEG_PER_MS = 360 / 70_000
-
-// How much scroll velocity (px/s) influences the rotation offset
-// Lower = subtler. 0.010–0.018 is the sweet spot for "cinematic, not distracting"
-const SCROLL_INFLUENCE = 0.013
-
-// Spring config for smoothing raw scroll velocity
-const VELOCITY_SPRING = { damping: 55, stiffness: 350, restDelta: 0.001 }
+const BASE_DEG_PER_MS = 360 / 75_000  // 1 full revolution per 75 seconds
+const SCROLL_SCALE     = 18            // how much scroll velocity (px/ms) → degrees
+const SCROLL_DECAY     = 0.90          // how fast scroll influence fades per frame
+const POINTER_MAX_DEG  = 14            // max ±° from mouse horizontal position
+const GYRO_MAX_DEG     = 28            // max ±° from device tilt (gamma)
 
 export default function HeroBackground() {
-  const { scrollY } = useScroll()
-  const scrollVelocity = useVelocity(scrollY)
+  const wrapperRef = useRef<HTMLDivElement>(null)
 
-  // Smooth the raw velocity to remove frame-by-frame jitter
-  const smoothVelocity = useSpring(scrollVelocity, VELOCITY_SPRING)
+  useEffect(() => {
+    const el = wrapperRef.current
+    if (!el) return
 
-  // MotionValue that drives the CSS transform
-  const rotate = useMotionValue(0)
+    let rafId: number
+    let baseAngle      = 0
+    let scrollInfluence = 0
+    let pointerOffset  = 0   // desktop: mouse horizontal parallax
+    let gyroOffset     = 0   // mobile:  device tilt
+    let lastScrollY    = window.scrollY
+    let lastScrollTime = performance.now()
+    let lastFrameTime: number | null = null
 
-  // Mutable ref for the accumulating base angle — avoids re-renders
-  const baseAngle = useRef(0)
+    // ── Scroll (desktop, page-level) ──────────────────────────────────────
+    const onScroll = () => {
+      const now = performance.now()
+      const dt  = now - lastScrollTime
+      const dy  = window.scrollY - lastScrollY
+      if (dt > 0) {
+        const velocity = dy / dt                   // px/ms
+        scrollInfluence += velocity * SCROLL_SCALE // accumulate burst
+      }
+      lastScrollY    = window.scrollY
+      lastScrollTime = now
+    }
 
-  useAnimationFrame((_, delta) => {
-    // Accumulate base rotation continuously
-    baseAngle.current += BASE_DEG_PER_MS * delta
+    // ── Mouse parallax (desktop only) ─────────────────────────────────────
+    const onPointerMove = (e: PointerEvent) => {
+      if (e.pointerType !== 'mouse') return
+      const cx = window.innerWidth / 2
+      const nx = (e.clientX - cx) / cx            // −1 → +1
+      pointerOffset = nx * POINTER_MAX_DEG
+    }
 
-    // Scroll influence: positive = down = CW, negative = up = CCW
-    const influence = smoothVelocity.get() * SCROLL_INFLUENCE
+    // ── Gyroscope (mobile) ────────────────────────────────────────────────
+    // gamma = left/right tilt: –90° (tilt left) → +90° (tilt right)
+    const onOrientation = (e: DeviceOrientationEvent) => {
+      const gamma   = e.gamma ?? 0
+      gyroOffset = (gamma / 90) * GYRO_MAX_DEG
+    }
 
-    rotate.set(baseAngle.current + influence)
-  })
+    // ── Main animation loop (native RAF, not Framer Motion) ───────────────
+    const tick = (time: number) => {
+      const delta   = lastFrameTime != null ? time - lastFrameTime : 0
+      lastFrameTime = time
+
+      baseAngle      += BASE_DEG_PER_MS * delta    // constant slow drift
+      scrollInfluence *= SCROLL_DECAY              // decay scroll burst
+
+      const angle = baseAngle + scrollInfluence + pointerOffset + gyroOffset
+      el.style.transform = `rotate(${angle}deg)`
+
+      rafId = requestAnimationFrame(tick)
+    }
+
+    rafId = requestAnimationFrame(tick)
+
+    window.addEventListener('scroll',          onScroll,      { passive: true })
+    window.addEventListener('pointermove',     onPointerMove, { passive: true })
+    window.addEventListener('deviceorientation', onOrientation, { passive: true })
+
+    return () => {
+      cancelAnimationFrame(rafId)
+      window.removeEventListener('scroll',           onScroll)
+      window.removeEventListener('pointermove',      onPointerMove)
+      window.removeEventListener('deviceorientation', onOrientation)
+    }
+  }, [])
 
   return (
     <div
       aria-hidden="true"
       style={{
-        position: 'absolute',
-        inset: 0,
-        zIndex: 0,
+        position : 'absolute',
+        inset    : 0,
+        zIndex   : 0,
         pointerEvents: 'none',
-        overflow: 'hidden',
-        display: 'flex',
-        alignItems: 'center',
+        overflow : 'hidden',
+        display  : 'flex',
+        alignItems    : 'center',
         justifyContent: 'center',
-        // Radial mask: center is visible, edges fade cleanly to black
-        // Prevents the rotating corners from ever peeking into the frame
-        WebkitMaskImage:
-          'radial-gradient(ellipse 62% 58% at 50% 52%, black 10%, transparent 100%)',
-        maskImage:
-          'radial-gradient(ellipse 62% 58% at 50% 52%, black 10%, transparent 100%)',
+        // Radial mask: center visible → transparent edges
+        // Prevents rotating corners from ever clipping into the viewport
+        WebkitMaskImage: 'radial-gradient(ellipse 65% 62% at 50% 52%, black 5%, transparent 100%)',
+        maskImage       : 'radial-gradient(ellipse 65% 62% at 50% 52%, black 5%, transparent 100%)',
       }}
     >
-      <motion.div
+      <div
+        ref={wrapperRef}
         style={{
-          rotate,
-          willChange: 'transform',
-          // Square container — same dimension either way so rotation is circular
-          width: 'min(110vw, 110vh)',
-          height: 'min(110vw, 110vh)',
-          position: 'relative',
+          width    : 'min(115vw, 115vh)',
+          height   : 'min(115vw, 115vh)',
+          position : 'relative',
           flexShrink: 0,
+          willChange: 'transform',
         }}
       >
         <Image
@@ -101,16 +135,16 @@ export default function HeroBackground() {
           draggable={false}
           style={{
             objectFit: 'contain',
-            // invert(1): turns near-black silhouette into a white presence
-            // sepia + hue-rotate: slight warm tint toward the brand yellow
-            // opacity: 0.08 keeps it "shadow-like" without fighting the text
-            filter: 'invert(1) sepia(0.15) hue-rotate(5deg) blur(1px)',
-            opacity: 0.08,
-            // screen mode makes pure black transparent, only lighter areas show
+            // brightness boosts subtle tonal difference → silhouette lifts above black bg
+            // contrast pushes near-black areas back to pure black → transparent via screen
+            // screen blend: black = invisible, lighter = shows through
+            // No invert() — invert was making the entire rectangle glow as a visible square
+            filter      : 'brightness(4) contrast(2.2) blur(0.5px)',
+            opacity     : 0.18,
             mixBlendMode: 'screen',
           }}
         />
-      </motion.div>
+      </div>
     </div>
   )
 }
