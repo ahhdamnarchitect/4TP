@@ -1,26 +1,32 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef } from 'react'
 
 /**
  * Nav — Fixed top navigation.
- * Fades in after LogoIntro exits (~3.2s).
  *
- * Uses useEffect + setTimeout instead of Framer Motion's animate delay.
- * Framer Motion's animation scheduler can be starved when useAnimationFrame
- * (HeroBackground) is also running, causing the Nav to stay invisible.
- * Plain CSS transition is immune to that conflict.
+ * Listens for 'intro:done' custom event (dispatched by LogoIntro when the
+ * logo finishes its morph travel to the nav position) then fades in.
+ * Plain CSS transition is used to avoid Framer Motion scheduler conflicts.
  */
 export default function Nav() {
-  const [visible, setVisible] = useState(false)
+  const navRef = useRef<HTMLElement>(null)
 
   useEffect(() => {
-    const t = setTimeout(() => setVisible(true), 3200)
-    return () => clearTimeout(t)
+    const nav = navRef.current
+    if (!nav) return
+
+    const onDone = () => {
+      nav.style.opacity = '1'
+    }
+
+    window.addEventListener('intro:done', onDone)
+    return () => window.removeEventListener('intro:done', onDone)
   }, [])
 
   return (
     <nav
+      ref={navRef}
       aria-label="Main navigation"
       style={{
         position  : 'fixed',
@@ -33,33 +39,50 @@ export default function Nav() {
         justifyContent: 'space-between',
         padding   : '1.5rem clamp(1.5rem, 5vw, 5rem)',
         fontFamily: 'Inter, InterVariable, system-ui, sans-serif',
-        opacity   : visible ? 1 : 0,
-        transition: 'opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1)',
+        opacity   : 0,
+        transition: 'opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1)',
+        // Subtle backdrop on scroll (set via JS if needed)
       }}
     >
-      {/* Brand */}
+      {/* Brand wordmark */}
       <span
         style={{
-          fontWeight  : 900,
-          fontSize    : '0.85rem',
-          letterSpacing: '0.24em',
-          color       : '#fff',
+          fontWeight   : 900,
+          fontSize     : '0.88rem',
+          letterSpacing: '0.22em',
+          color        : '#fff',
           textTransform: 'uppercase',
+          lineHeight   : 1,
         }}
       >
         4TP
       </span>
 
-      {/* Right side */}
+      {/* Status chip */}
       <span
         style={{
+          display     : 'inline-flex',
+          alignItems  : 'center',
+          gap         : '0.45rem',
           fontWeight  : 500,
-          fontSize    : '0.7rem',
-          letterSpacing: '0.2em',
-          color       : 'rgba(255,255,255,0.3)',
+          fontSize    : '0.68rem',
+          letterSpacing: '0.18em',
+          color       : 'rgba(255,255,255,0.28)',
           textTransform: 'uppercase',
         }}
       >
+        {/* Pulsing green dot */}
+        <span
+          aria-hidden="true"
+          style={{
+            width       : '5px',
+            height      : '5px',
+            borderRadius: '50%',
+            background  : '#4ade80',
+            display     : 'inline-block',
+            animation   : 'navDotPulse 2.4s ease-in-out infinite',
+          }}
+        />
         Network
       </span>
     </nav>
