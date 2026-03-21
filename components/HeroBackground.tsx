@@ -29,7 +29,6 @@
  *   Rotation applied directly via ref.style.transform — zero React renders.
  */
 
-import Image from 'next/image'
 import { useRef, useEffect } from 'react'
 
 const BASE_DEG_PER_MS  = 360 / 75_000  // 1 revolution per 75 seconds
@@ -171,7 +170,9 @@ export default function HeroBackground() {
         maskImage       : 'radial-gradient(ellipse 75% 85% at 50% 52%, black 20%, transparent 100%)',
       }}
     >
-      {/* Rotating silhouette */}
+      {/* Rotating silhouette — plain img bypasses Next.js optimization pipeline
+          which was failing on the C2PA metadata chunks in this PNG file.
+          This is a decorative layer; optimization benefits don't apply here. */}
       <div
         ref={wrapperRef}
         style={{
@@ -180,19 +181,24 @@ export default function HeroBackground() {
           position : 'relative',
           flexShrink: 0,
           willChange: 'transform',
+          display  : 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
         }}
       >
-        <Image
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
           src="/hero-silhouette-2.png"
           alt=""
-          fill
-          priority
           draggable={false}
           style={{
+            width       : '100%',
+            height      : '100%',
             objectFit   : 'contain',
             filter      : 'brightness(4) contrast(2.2) blur(0.5px)',
             opacity     : 0.18,
             mixBlendMode: 'screen',
+            display     : 'block',
           }}
         />
       </div>
