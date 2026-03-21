@@ -2,14 +2,15 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 import { Resend } from 'resend'
 
-const supabase = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-  )
-
-const resend = new Resend(process.env.RESEND_API_KEY)
+// Clients initialized lazily inside the handler so missing env vars
+// during build-time static analysis don't throw module-level errors.
 
 export async function POST(req: NextRequest) {
+    const supabase = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+    )
+    const resend = new Resend(process.env.RESEND_API_KEY)
     try {
           const { email } = await req.json()
 

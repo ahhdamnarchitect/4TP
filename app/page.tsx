@@ -1,25 +1,31 @@
-import LogoIntro from '@/components/LogoIntro'
-import Nav from '@/components/Nav'
-import HeroSection from '@/components/HeroSection'
-import Cursor from '@/components/Cursor'
+import LogoIntro       from '@/components/LogoIntro'
+import Nav             from '@/components/Nav'
+import HeroSection     from '@/components/HeroSection'
+import ContentSections from '@/components/ContentSections'
+import MobileCTA       from '@/components/MobileCTA'
+import Cursor          from '@/components/Cursor'
 
 export default function Home() {
   return (
     <main style={{ background: '#000', minHeight: '100vh', position: 'relative' }}>
-      {/* Grain overlay */}
+      {/* Film grain overlay — fixed, z=50 */}
       <div className="grain-overlay" aria-hidden="true" />
 
-      {/* Custom cursor (desktop only — CSS hides system cursor on pointer devices) */}
+      {/* Custom cursor (desktop pointer devices only) */}
       <Cursor />
 
-      {/* Logo intro animation — covers page, then slides up */}
+      {/* Logo intro — covers page, morphs logo to nav, then unmounts */}
       <LogoIntro />
 
-      {/* Top nav — fades in after intro */}
+      {/* Fixed top navigation — fades in after intro:done */}
       <Nav />
 
-      {/* Main content — always rendered, revealed when LogoIntro exits */}
+      {/* Sticky mobile bottom CTA — appears after intro:done */}
+      <MobileCTA />
+
+      {/* ── Page sections ── */}
       <HeroSection />
+      <ContentSections />
     </main>
   )
 }

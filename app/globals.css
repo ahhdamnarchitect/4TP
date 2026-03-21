@@ -6,275 +6,233 @@
 @import url('https://rsms.me/inter/inter.css');
 
 :root {
-    --color-yellow: #FEEB3D;
-    --color-black: #000000;
-    --color-white: #FFFFFF;
-    --color-gray-dark: #111111;
-    --color-gray-mid: #1A1A1A;
+    --color-yellow    : #FEEB3D;
+    --color-black     : #000000;
+    --color-white     : #FFFFFF;
+    --color-gray-dark : #111111;
+    --color-gray-mid  : #0a0a0a;
     --color-gray-light: #333333;
 }
 
 * {
     box-sizing: border-box;
-    padding: 0;
-    margin: 0;
+    padding   : 0;
+    margin    : 0;
 }
 
 html {
-    scroll-behavior: smooth;
+    scroll-behavior     : smooth;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     overflow-x: hidden;
-    max-width: 100vw;
+    max-width : 100vw;
 }
 
 body {
-    background-color: var(--color-black);
-    color: var(--color-white);
-    font-family: 'Inter', 'InterVariable', system-ui, sans-serif;
+    background-color : var(--color-black);
+    color            : var(--color-white);
+    font-family      : 'Inter', 'InterVariable', system-ui, sans-serif;
     font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
-    overflow-x: hidden;
-    max-width: 100vw;
-    position: relative;
+    overflow-x       : hidden;
+    max-width        : 100vw;
+    position         : relative;
 }
 
-/* Custom scrollbar */
-::-webkit-scrollbar {
-    width: 4px;
-}
-::-webkit-scrollbar-track {
-    background: var(--color-black);
-}
+/* ── Custom scrollbar ── */
+::-webkit-scrollbar { width: 3px; }
+::-webkit-scrollbar-track { background: var(--color-black); }
 ::-webkit-scrollbar-thumb {
-    background: var(--color-gray-light);
+    background   : var(--color-gray-light);
     border-radius: 2px;
 }
-::-webkit-scrollbar-thumb:hover {
-    background: var(--color-yellow);
-}
+::-webkit-scrollbar-thumb:hover { background: var(--color-yellow); }
 
-/* Selection color */
+/* ── Selection ── */
 ::selection {
     background: var(--color-yellow);
-    color: var(--color-black);
+    color     : var(--color-black);
 }
 
-/* Focus ring using brand yellow */
+/* ── Focus ring ── */
 :focus-visible {
-    outline: 2px solid var(--color-yellow);
+    outline       : 2px solid var(--color-yellow);
     outline-offset: 2px;
 }
 
-/* ---------------------------------------- */
-/* LOGO INTRO ANIMATION                     */
-/* ---------------------------------------- */
-
-.logo-intro-overlay {
-    position: fixed;
-    inset: 0;
-    background: var(--color-black);
-    z-index: 100;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.logo-square {
-    background: var(--color-yellow);
-    position: relative;
-    overflow: hidden;
-}
-
-.logo-four {
-    font-family: 'Inter', sans-serif;
-    font-weight: 900;
-    color: var(--color-black);
-    line-height: 1;
-    user-select: none;
-}
-
-/* ---------------------------------------- */
-/* GRAIN TEXTURE OVERLAY                    */
-/* ---------------------------------------- */
+/* ────────────────────────────────────────────────────────────────────────── */
+/* GRAIN TEXTURE OVERLAY                                                       */
+/* ────────────────────────────────────────────────────────────────────────── */
 
 .grain-overlay {
-    position: fixed;
-    inset: 0;
+    position      : fixed;
+    inset         : 0;
     pointer-events: none;
-    z-index: 50;
-    opacity: 0.035;
+    z-index       : 50;
+    opacity       : 0.03;
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
     background-repeat: repeat;
-    background-size: 128px 128px;
+    background-size : 128px 128px;
 }
 
-/* ---------------------------------------- */
-/* FORM STYLES                              */
-/* ---------------------------------------- */
+/* ────────────────────────────────────────────────────────────────────────── */
+/* FORM STYLES                                                                 */
+/* ────────────────────────────────────────────────────────────────────────── */
 
 .email-input {
-    background: transparent;
-    border: 1.5px solid rgba(255, 255, 255, 0.22);
-    color: #ffffff;
-    font-family: 'Inter', sans-serif;
-    font-size: 0.9rem;
+    background  : transparent;
+    border      : 1.5px solid rgba(255, 255, 255, 0.18);
+    color       : #ffffff;
+    font-family : 'Inter', sans-serif;
+    font-size   : 0.9rem;
     letter-spacing: 0.02em;
-    transition: border-color 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
+    transition  : border-color 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
     border-radius: 9999px;
-    display: block;
+    display     : block;
 }
 
 .email-input:focus {
-    outline: none;
+    outline     : none;
     border-color: var(--color-yellow);
-    background: rgba(254, 235, 61, 0.04);
-    box-shadow: 0 0 0 3px rgba(254, 235, 61, 0.1);
+    background  : rgba(254, 235, 61, 0.04);
+    box-shadow  : 0 0 0 3px rgba(254, 235, 61, 0.1);
 }
 
 .email-input::placeholder {
-    color: rgba(255, 255, 255, 0.38);
+    color         : rgba(255, 255, 255, 0.32);
     letter-spacing: 0.06em;
     text-transform: uppercase;
-    font-size: 0.75rem;
+    font-size     : 0.74rem;
 }
 
 /* Side-by-side on screens ≥ 480px */
 @media (min-width: 480px) {
-    .email-form-row {
-        flex-direction: row !important;
-    }
-    .email-form-row input {
-        flex: 1;
-        width: auto !important;
-    }
-    .email-form-row button {
-        width: auto !important;
-        flex-shrink: 0;
-    }
+    .email-form-row { flex-direction: row !important; }
+    .email-form-row input  { flex: 1; width: auto !important; }
+    .email-form-row button { width: auto !important; flex-shrink: 0; }
 }
 
 .cta-button {
-    background: var(--color-yellow);
-    color: var(--color-black);
-    font-family: 'Inter', sans-serif;
-    font-weight: 700;
+    background    : var(--color-yellow);
+    color         : var(--color-black);
+    font-family   : 'Inter', sans-serif;
+    font-weight   : 700;
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    font-size: 0.75rem;
-    transition: transform 0.2s ease, box-shadow 0.3s ease, background 0.2s ease;
-    cursor: pointer;
+    font-size     : 0.75rem;
+    transition    : transform 0.2s ease, box-shadow 0.3s ease;
+    cursor        : pointer;
 }
 
 .cta-button:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 8px 32px rgba(254, 235, 61, 0.4);
+    transform : translateY(-1px);
+    box-shadow: 0 8px 32px rgba(254, 235, 61, 0.38);
 }
 
-.cta-button:active {
-    transform: translateY(0);
-}
+.cta-button:active  { transform: translateY(0); }
+.cta-button:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
 
-.cta-button:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-    transform: none;
-}
+/* ────────────────────────────────────────────────────────────────────────── */
+/* EYEBROW / CAPTION TEXT                                                      */
+/* ────────────────────────────────────────────────────────────────────────── */
 
-/* ---------------------------------------- */
-/* SCROLL REVEAL UTILITY                    */
-/* ---------------------------------------- */
-
-.reveal-hidden {
-    opacity: 0;
-    transform: translateY(32px);
-}
-
-.reveal-visible {
-    opacity: 1;
-    transform: translateY(0);
-    transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
-                transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-/* ---------------------------------------- */
-/* EYEBROW TEXT                             */
-/* ---------------------------------------- */
-
-/* "Education · Inspiration · Discipline · Innovation" — always one line */
 .eyebrow-text {
-    color: rgba(255, 255, 255, 0.55);
-    font-size: clamp(0.52rem, 2.6vw, 0.7rem);
-    letter-spacing: clamp(0.1em, 0.6vw, 0.32em);
+    color         : rgba(255, 255, 255, 0.45);
+    font-size     : clamp(0.5rem, 2.5vw, 0.68rem);
+    letter-spacing: clamp(0.1em, 0.5vw, 0.3em);
     text-transform: uppercase;
-    margin-bottom: clamp(1.5rem, 4vw, 2.5rem);
-    white-space: nowrap;
+    margin-bottom : clamp(1.5rem, 4vw, 2.5rem);
+    white-space   : nowrap;
 }
 
-/* Shrink font + letter-spacing so it stays on one line on small phones */
 @media (max-width: 479px) {
     .eyebrow-text {
-        font-size: 0.44rem;
-        letter-spacing: 0.055em;
+        font-size     : 0.42rem;
+        letter-spacing: 0.05em;
     }
 }
 
-/* ---------------------------------------- */
-/* CAPTION TEXT                             */
-/* ---------------------------------------- */
-
-/* "Join the network — be first to know" — kept readable on dark bg */
 .caption-text {
-    color: rgba(255, 255, 255, 0.78);
-    font-size: 0.62rem;
+    color         : rgba(255, 255, 255, 0.7);
+    font-size     : 0.6rem;
     letter-spacing: 0.2em;
     text-transform: uppercase;
-    margin-top: 1rem;
 }
 
-/* ---------------------------------------- */
-/* MARQUEE                                  */
-/* ---------------------------------------- */
+/* ────────────────────────────────────────────────────────────────────────── */
+/* MARQUEE                                                                     */
+/* ────────────────────────────────────────────────────────────────────────── */
 
 @keyframes marquee {
-    0% { transform: translateX(0); }
+    0%   { transform: translateX(0); }
     100% { transform: translateX(-50%); }
 }
 
 .marquee-track {
-    animation: marquee 20s linear infinite;
+    animation : marquee 22s linear infinite;
     white-space: nowrap;
-    display: flex;
+    display   : flex;
 }
 
-.marquee-track:hover {
-    animation-play-state: paused;
+.marquee-track:hover { animation-play-state: paused; }
+
+/* ────────────────────────────────────────────────────────────────────────── */
+/* SECTION GRID LINES                                                          */
+/* ────────────────────────────────────────────────────────────────────────── */
+
+.section-grid-lines {
+    position      : absolute;
+    inset         : 0;
+    pointer-events: none;
+    background-image:
+        linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+    background-size: 80px 80px;
+    mask-image: linear-gradient(to bottom, transparent 0%, black 20%, black 80%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 20%, black 80%, transparent 100%);
 }
 
-/* ---------------------------------------- */
-/* CURSOR (desktop only)                    */
-/* ---------------------------------------- */
+/* ────────────────────────────────────────────────────────────────────────── */
+/* NAV DOT PULSE ANIMATION                                                     */
+/* ────────────────────────────────────────────────────────────────────────── */
+
+@keyframes navDotPulse {
+    0%, 100% { opacity: 1;    transform: scale(1); }
+    50%      { opacity: 0.45; transform: scale(0.7); }
+}
+
+/* ────────────────────────────────────────────────────────────────────────── */
+/* SPINNER (for form loading state)                                            */
+/* ────────────────────────────────────────────────────────────────────────── */
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* ────────────────────────────────────────────────────────────────────────── */
+/* CURSOR (desktop only)                                                       */
+/* ────────────────────────────────────────────────────────────────────────── */
 
 @media (pointer: fine) {
     body { cursor: none; }
 
-    /* The .custom-cursor div is injected & moved by Cursor.tsx */
     .custom-cursor {
-        position: fixed;
-        width: 10px;
-        height: 10px;
-        background: var(--color-yellow);
-        border-radius: 50%;
+        position      : fixed;
+        width         : 9px;
+        height        : 9px;
+        background    : var(--color-yellow);
+        border-radius : 50%;
         pointer-events: none;
-        z-index: 9999;
-        top: 0;
-        left: 0;
-        transform: translate(-50%, -50%);
-        transition: width 0.2s ease, height 0.2s ease, opacity 0.2s ease;
+        z-index       : 9999;
+        top           : 0;
+        left          : 0;
+        transform     : translate(-50%, -50%);
+        transition    : width 0.22s ease, height 0.22s ease, opacity 0.22s ease;
         mix-blend-mode: difference;
     }
+
     .custom-cursor.expanded {
-        width: 40px;
-        height: 40px;
-        opacity: 0.25;
+        width  : 42px;
+        height : 42px;
+        opacity: 0.22;
     }
 }

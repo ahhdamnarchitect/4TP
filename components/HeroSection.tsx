@@ -1,93 +1,119 @@
 'use client'
 
+import { useEffect, useRef, useState } from 'react'
+import { gsap } from 'gsap'
 import EmailForm from './EmailForm'
 import HeroBackground from './HeroBackground'
 
 /**
- * HeroSection — ComplexCon-inspired, signup-focused layout.
+ * HeroSection — Full-viewport hero with cinematic silhouette and signup.
  *
- * Visual hierarchy (top → bottom):
- *   1. Eyebrow (pillars)
- *   2. "MOVE FORWARD." — supportive headline, not dominant
- *   3. Tagline copy
- *   4. ★ EMAIL FORM — the focal point of the page ★
- *   5. Caption
- *   6. Yellow rule + values marquee
+ * Content is hidden (opacity 0) until the LogoIntro fires 'intro:done'.
+ * Then GSAP staggers in each element with an expo ease for a premium reveal.
  *
- * Everything is center-aligned. Form sits in the lower visual center,
- * where the eye naturally lands — mirroring ComplexCon's structure.
+ * The HeroBackground silhouette is always rendered — it becomes visible
+ * naturally as the LogoIntro overlay fades away during the morph phase.
  */
 
 const VALUES = ['EDUCATION', 'INSPIRATION', 'DISCIPLINE', 'INNOVATION', 'MOVE FORWARD']
 
 export default function HeroSection() {
+  const contentRef = useRef<HTMLDivElement>(null)
+  const [, setRevealed] = useState(false)
+
+  useEffect(() => {
+    const onDone = () => {
+      setRevealed(true)
+      const el = contentRef.current
+      if (!el) return
+
+      // Stagger each direct child element in
+      gsap.from(el.children, {
+        opacity : 0,
+        y       : 28,
+        duration: 0.85,
+        stagger : 0.12,
+        ease    : 'expo.out',
+        delay   : 0.05,
+        clearProps: 'all',
+      })
+
+      el.style.opacity = '1'
+    }
+
+    window.addEventListener('intro:done', onDone)
+    return () => window.removeEventListener('intro:done', onDone)
+  }, [])
+
   return (
     <section
+      id="hero"
       style={{
-        position: 'relative',       // Required: anchors HeroBackground's absolute inset-0
-        minHeight: '100dvh',
+        position  : 'relative',
+        minHeight : '100dvh',
         background: '#000',
-        display: 'flex',
+        display   : 'flex',
         flexDirection: 'column',
         alignItems: 'center',
         fontFamily: 'Inter, InterVariable, system-ui, sans-serif',
-        overflowX: 'hidden',
-        width: '100%',
-        boxSizing: 'border-box',
+        overflowX : 'hidden',
+        width     : '100%',
+        boxSizing : 'border-box',
       }}
       aria-label="4TP Hero"
     >
-      {/* ── Animated background layer (z-0, behind all content) ── */}
+      {/* Silhouette background — revealed as LogoIntro overlay fades */}
       <HeroBackground />
 
-      {/* ── Main centered content (z-1, in front of background) ── */}
+      {/* Main content — hidden until intro:done, then staggered in */}
       <div
+        ref={contentRef}
         style={{
-          position: 'relative',
-          zIndex: 1,
-          flex: 1,
-          display: 'flex',
+          position  : 'relative',
+          zIndex    : 1,
+          flex      : 1,
+          display   : 'flex',
           flexDirection: 'column',
           alignItems: 'center',
           justifyContent: 'center',
-          textAlign: 'center',
-          width: '100%',
-          maxWidth: '720px',
-          padding: 'clamp(5.5rem, 12vw, 8rem) clamp(1.25rem, 5vw, 2.5rem) clamp(2rem, 5vw, 3rem)',
-          boxSizing: 'border-box',
-          gap: '0',
+          textAlign : 'center',
+          width     : '100%',
+          maxWidth  : '720px',
+          padding   : 'clamp(5.5rem, 12vw, 8rem) clamp(1.25rem, 5vw, 2.5rem) clamp(2rem, 5vw, 3rem)',
+          boxSizing : 'border-box',
+          opacity   : 0,  // hidden until intro:done fires
         }}
       >
-        {/* Eyebrow — CSS class handles font-size/letter-spacing breakpoints */}
+        {/* Eyebrow */}
         <p className="eyebrow-text">
           Education &nbsp;·&nbsp; Inspiration &nbsp;·&nbsp; Discipline &nbsp;·&nbsp; Innovation
         </p>
 
-        {/* Headline — secondary supporting role */}
+        {/* Primary headline */}
         <h1
           style={{
-            fontWeight: 900,
-            fontSize: 'clamp(2.8rem, 9vw, 7.5rem)',
-            lineHeight: 0.9,
+            fontWeight  : 900,
+            fontSize    : 'clamp(3rem, 10vw, 8rem)',
+            lineHeight  : 0.88,
             letterSpacing: '-0.03em',
-            color: '#fff',
+            color       : '#fff',
             textTransform: 'uppercase',
-            margin: 0,
-            marginBottom: 'clamp(1.25rem, 3vw, 2rem)',
+            margin      : 0,
+            marginBottom: 'clamp(1.5rem, 3.5vw, 2.25rem)',
           }}
         >
-          MOVE{' '}
-          <span style={{ color: '#FEEB3D' }}>FORWARD.</span>
+          Move{' '}
+          <span style={{ color: '#FEEB3D' }}>Different.</span>
         </h1>
 
         {/* Tagline */}
         <p
           style={{
-            color: 'rgba(255,255,255,0.38)',
-            fontSize: 'clamp(0.8rem, 2.2vw, 1rem)',
-            lineHeight: 1.7,
-            fontWeight: 300,
-            maxWidth: '440px',
+            color      : 'rgba(255,255,255,0.36)',
+            fontSize   : 'clamp(0.78rem, 2vw, 0.95rem)',
+            lineHeight : 1.75,
+            fontWeight : 300,
+            maxWidth   : '420px',
             marginBottom: 'clamp(2rem, 5vw, 3rem)',
           }}
         >
@@ -95,43 +121,38 @@ export default function HeroSection() {
           individuals to move forward with clarity and purpose.
         </p>
 
-        {/* ── EMAIL FORM — FOCAL POINT ── */}
-        <div
-          style={{
-            width: '100%',
-            maxWidth: '520px',
-          }}
-        >
+        {/* Email form */}
+        <div style={{ width: '100%', maxWidth: '500px' }}>
           <EmailForm />
         </div>
 
-        {/* Caption — CSS class handles color so it's easy to update globally */}
-        <p className="caption-text">
+        {/* Caption */}
+        <p className="caption-text" style={{ marginTop: '1.1rem' }}>
           Join the network — be first to know
         </p>
       </div>
 
-      {/* ── Yellow accent rule ── */}
+      {/* Yellow rule */}
       <div
         style={{
-          position: 'relative',
-          zIndex: 1,
-          width: 'calc(100% - clamp(2.5rem, 10vw, 10rem))',
-          height: '1.5px',
-          background: '#FEEB3D',
+          position  : 'relative',
+          zIndex    : 1,
+          width     : 'calc(100% - clamp(2.5rem, 10vw, 10rem))',
+          height    : '1px',
+          background: 'rgba(254,235,61,0.6)',
           flexShrink: 0,
         }}
       />
 
-      {/* ── Values marquee ── */}
+      {/* Values marquee */}
       <div
         style={{
-          position: 'relative',
-          zIndex: 1,
-          overflow: 'hidden',
-          padding: '0.85rem 0',
-          width: '100%',
-          borderBottom: '1px solid rgba(255,255,255,0.05)',
+          position  : 'relative',
+          zIndex    : 1,
+          overflow  : 'hidden',
+          padding   : '0.9rem 0',
+          width     : '100%',
+          borderBottom: '1px solid rgba(255,255,255,0.04)',
           flexShrink: 0,
         }}
       >
@@ -140,13 +161,13 @@ export default function HeroSection() {
             <span
               key={i}
               style={{
-                margin: '0 2rem',
-                color: 'rgba(255,255,255,0.45)',
-                fontSize: '0.6rem',
-                letterSpacing: '0.32em',
+                margin      : '0 2.5rem',
+                color       : 'rgba(255,255,255,0.35)',
+                fontSize    : '0.58rem',
+                letterSpacing: '0.34em',
                 textTransform: 'uppercase',
-                fontWeight: 500,
-                whiteSpace: 'nowrap',
+                fontWeight  : 500,
+                whiteSpace  : 'nowrap',
               }}
             >
               {v}
