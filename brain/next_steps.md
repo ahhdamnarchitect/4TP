@@ -1,14 +1,15 @@
 # Next Steps
 
-_Last updated: 2026-03-20 (Session 6)_
+_Last updated: 2026-03-20 (Session 7)_
 
 ---
 
 ## Immediate / Resume Here
 
+- [ ] **Verify `49dc1fd` deploy is READY** — confirm Vercel deployed the eyebrow + caption fix to production. Check https://4-tp.vercel.app on a real mobile device.
+- [ ] **Mobile smoke test** — confirm: (1) eyebrow "Education · Inspiration · Discipline · Innovation" all on one line, no clipping; (2) "JOIN THE NETWORK — BE FIRST TO KNOW" caption is clearly readable; (3) no horizontal scroll; (4) form stacks vertically on narrow screens.
 - [ ] **Verify email subscribe flow end-to-end** — submit a test email on https://4-tp.vercel.app, confirm Supabase insert and Resend confirmation delivery.
-- [ ] **Mobile responsiveness check** — view site on a mobile viewport. The display font (`clamp(4.5rem, 14.5vw, 17rem)`) may overflow on small screens. Adjust if needed.
-- [ ] **Decide on `4TPCirclePppl.png`** — either remove from `/public` (unused), or source a clean version without baked-in text for future use as a hero background or section image.
+- [ ] **Decide on `4TPCirclePppl.png`** — either remove from `/public` (unused), or source a clean version without baked-in text for future use.
 
 ---
 

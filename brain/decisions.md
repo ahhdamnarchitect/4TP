@@ -34,6 +34,18 @@ Append entries below as relevant.
 - Alternatives Considered: String phase enum ('init' | 'square' | 'expand' | 'logo' | 'exit' | 'gone').
 - Impact: More readable animation sequencing code.
 
+- Date: 2026-03-20 (Session 7)
+- Decision: Move eyebrow and caption styles to CSS classes (`.eyebrow-text`, `.caption-text`) instead of inline styles.
+- Reason: Inline styles cannot respond to CSS media query breakpoints. To shrink the eyebrow text on small phones without wrapping, a `@media (max-width: 479px)` override is required — impossible with inline styles.
+- Alternatives Considered: JavaScript-driven responsive sizing; `clamp()` with more aggressive minimum values.
+- Impact: Eyebrow stays on one line across all screen sizes. Caption color can be updated globally from one place in globals.css.
+
+- Date: 2026-03-20 (Session 7)
+- Decision: Email form is the primary focal point of the hero — not the headline.
+- Reason: User feedback: "make the sign up the main focus of the screen." Headline reduced to `clamp(2.8rem, 9vw, 7.5rem)` (was 4.5–17rem). Form centered at `maxWidth: 520px` with generous surrounding whitespace.
+- Alternatives Considered: Keep large headline as dominant; use split-screen layout.
+- Impact: Visual hierarchy mirrors the goal of the page — capturing waitlist emails.
+
 - Date: 2026-03-20 (Session 6)
 - Decision: Adopt ComplexCon-style layout — large display type fills viewport, two-column bottom, yellow accent rule, values ticker.
 - Reason: User explicitly requested the site feel like complexcon.com — bold, editorial, dark, event-brand energy.

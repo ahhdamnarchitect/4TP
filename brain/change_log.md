@@ -10,6 +10,25 @@
 
 ## Entries
 
+- Date: 2026-03-20 (Session 7)
+- Change: Brightened caption text, fixed mobile eyebrow clipping.
+- Files Modified:
+  - `components/HeroSection.tsx` (eyebrow → `.eyebrow-text` class; caption → `.caption-text` class; removed inline styles for both)
+  - `app/globals.css` (added `.eyebrow-text` with `@media (max-width: 479px)` override at 0.44rem/0.055em; added `.caption-text` at rgba(255,255,255,0.78))
+- Reason: Caption "JOIN THE NETWORK — BE FIRST TO KNOW" was too dark (0.55 opacity) on mobile. Eyebrow text was cut off on small screens because `whiteSpace: nowrap` with wide letter-spacing overflowed the viewport — inline styles can't respond to breakpoints, so a CSS class + media query was required.
+- Commits: `49dc1fd`
+- Deployment: auto-triggered via git push to main
+
+- Date: 2026-03-20 (Session 7)
+- Change: Signup form as focal point, centered layout, pill input, mobile overflow fix, "2026" removed.
+- Files Modified:
+  - `components/HeroSection.tsx` (full centered redesign — all content center-aligned; headline reduced to clamp(2.8rem,9vw,7.5rem); "2026" removed; email form at maxWidth 520px as visual anchor; 100dvh viewport; overflowX hidden)
+  - `components/EmailForm.tsx` (placeholder → "Email Address"; borderRadius 9999px; color #fff; .email-form-row wrapper)
+  - `app/globals.css` (overflow-x hidden + max-width 100vw on html/body; .email-input pill radius + yellow focus glow; .email-form-row responsive media query at 480px)
+- Reason: User feedback — make signup the main focus, not "MOVE FORWARD."; mobile horizontal scroll bug; input too dim; placeholder wording; "2026" irrelevant to brand theme.
+- Commits: `f0e7ea1`
+- Deployment: `dpl_E6UdKiht1zFSU9NWLMnUq7Sr6TYq` — READY — https://4-tp.vercel.app
+
 - Date: 2026-03-20 (Session 6)
 - Change: Complete site rebuild — ComplexCon layout, working logo animation, cursor fix.
 - Files Modified:
