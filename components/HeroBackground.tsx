@@ -55,11 +55,16 @@ export default function HeroBackground() {
     let lastGamma       = 0
     let flashTimer: ReturnType<typeof setTimeout> | null = null
 
+    // navigator.vibrate is typed as always-present in lib.dom.d.ts but is
+    // actually undefined on iOS (Safari + Chrome). Cast to any for runtime check.
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const canVibrate = typeof (navigator as any).vibrate === 'function'
+
     // ── Visual snap flash (iOS substitute for haptics) ────────────────────
     // Fires a brief yellow glow when tilt thresholds are crossed.
-    // On Android, we use vibrate() instead and skip the flash.
+    // Only used on iOS where navigator.vibrate is unavailable.
     const triggerVisualSnap = (intensity: 'soft' | 'hard') => {
-      if (!flashEl || navigator.vibrate) return  // Android uses vibrate, not flash
+      if (!flashEl || canVibrate) return
       flashEl.style.opacity = intensity === 'hard' ? '0.12' : '0.06'
       if (flashTimer) clearTimeout(flashTimer)
       flashTimer = setTimeout(() => {
@@ -86,11 +91,13 @@ export default function HeroBackground() {
                        || Math.abs(prev) >= HAPTIC_HARD_DEG && Math.abs(curr) < HAPTIC_HARD_DEG
 
       if (crossedHard) {
-        if (navigator.vibrate) navigator.vibrate([20, 10, 20])  // Android
-        else triggerVisualSnap('hard')                          // iOS
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        if (canVibrate) (navigator as any).vibrate([20, 10, 20])  // Android
+        else triggerVisualSnap('hard')                             // iOS
       } else if (crossedSoft) {
-        if (navigator.vibrate) navigator.vibrate(10)            // Android
-        else triggerVisualSnap('soft')                          // iOS
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        if (canVibrate) (navigator as any).vibrate(10)            // Android
+        else triggerVisualSnap('soft')                            // iOS
       }
 
       lastGamma = gamma
