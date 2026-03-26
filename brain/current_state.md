@@ -17,7 +17,7 @@ _Last updated: 2026-03-25_
 ## Deployment
 
 - **Live URL**: https://4-tp.vercel.app (production)
-- **Latest pushed commit**: `b5ffc68` on `main` (includes gate/rebase `6b4173e` plus brain + `docs/PROGRESS.md` sync).
+- **Shipped feature commit** (gate + rebase + unified site shell): `6b4173e` on `main`. Tip of `main` may include doc-only commits — use `git log -1` locally for the exact hash.
 
 ---
 
