@@ -26,7 +26,8 @@ _Last updated: 2026-03-25_
 - **`docs/DESIGN.md`** — Product journey: white room → gate (≥3/4 yes) → logo → yellow email hold; motion rules; silhouette/gyro removed by design.
 - **`components/GateExperience.tsx`** — Orchestrates gate → denied → logo → yellow → **site**. On `phase === 'site'`: grain, cursor, nav, hero, **`ContentSections`**, **`MobileCTA`**. Dispatches **`intro:done`** once when the site phase mounts so `MobileCTA` (still event-driven) can show on touch devices.
 - **`components/LogoIntro.tsx`** — Gate flow: Framer yellow square → rings → logo hold → `onGateComplete` to yellow email (no slide-to-black in gate mode). Non-gate legacy path still slides overlay up.
-- **`components/HeroSection.tsx`** — Centered dark editorial hero (`MOVE FORWARD.`); **no** `HeroBackground`. Solid black + global grain only; `id="hero"` for scroll targets.
+- **`components/AccessGrantedScreen.tsx`** / **`components/AccessDeniedScreen.tsx`** — Theatrical outcome beats after the questionnaire.
+- **`components/HeroSection.tsx`** — Now supports `variant="yellow"` for the main email-entry landing hero (matches the logo yellow); `id="hero"` for scroll targets.
 - **`components/EmailForm.tsx`**, **`components/Nav.tsx`** (400ms fade-in), **`components/Cursor.tsx`** — As implemented in tree; Nav does not depend on `intro:done`.
 - **`app/api/subscribe/route.ts`** — Supabase **client created inside `POST`** after env check; Resend send only if `RESEND_API_KEY` set. **Local `next build` works without env vars.**
 - **`.eslintrc.json`** — Ensures `npm run lint` runs without an interactive setup prompt.

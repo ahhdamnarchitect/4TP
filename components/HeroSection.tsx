@@ -19,14 +19,20 @@ import EmailForm from './EmailForm'
 
 const VALUES = ['EDUCATION', 'INSPIRATION', 'DISCIPLINE', 'INNOVATION', 'MOVE FORWARD']
 
-export default function HeroSection() {
+type Props = {
+  variant?: 'dark' | 'yellow'
+}
+
+export default function HeroSection({ variant = 'dark' }: Props) {
+  const isYellow = variant === 'yellow'
+
   return (
     <section
       id="hero"
       style={{
         position: 'relative',
         minHeight: '100dvh',
-        background: '#000',
+        background: isYellow ? '#FEEB3D' : '#000',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
@@ -54,7 +60,12 @@ export default function HeroSection() {
           gap: '0',
         }}
       >
-        <p className="eyebrow-text">
+        <p
+          className="eyebrow-text"
+          style={{
+            color: isYellow ? 'rgba(0,0,0,0.6)' : undefined,
+          }}
+        >
           Education &nbsp;·&nbsp; Inspiration &nbsp;·&nbsp; Discipline &nbsp;·&nbsp; Innovation
         </p>
 
@@ -64,19 +75,19 @@ export default function HeroSection() {
             fontSize: 'clamp(2.8rem, 9vw, 7.5rem)',
             lineHeight: 0.9,
             letterSpacing: '-0.03em',
-            color: '#fff',
+            color: isYellow ? '#000' : '#fff',
             textTransform: 'uppercase',
             margin: 0,
             marginBottom: 'clamp(1.25rem, 3vw, 2rem)',
           }}
         >
           MOVE{' '}
-          <span style={{ color: '#FEEB3D' }}>FORWARD.</span>
+          <span style={{ color: isYellow ? '#000' : '#FEEB3D' }}>FORWARD.</span>
         </h1>
 
         <p
           style={{
-            color: 'rgba(255,255,255,0.38)',
+            color: isYellow ? 'rgba(0,0,0,0.62)' : 'rgba(255,255,255,0.38)',
             fontSize: 'clamp(0.8rem, 2.2vw, 1rem)',
             lineHeight: 1.7,
             fontWeight: 300,
@@ -94,10 +105,15 @@ export default function HeroSection() {
             maxWidth: '520px',
           }}
         >
-          <EmailForm />
+          <EmailForm variant={isYellow ? 'yellow' : 'dark'} />
         </div>
 
-        <p className="caption-text">
+        <p
+          className="caption-text"
+          style={{
+            color: isYellow ? 'rgba(0,0,0,0.75)' : undefined,
+          }}
+        >
           Join the network — be first to know
         </p>
       </div>
@@ -108,7 +124,7 @@ export default function HeroSection() {
           zIndex: 1,
           width: 'calc(100% - clamp(2.5rem, 10vw, 10rem))',
           height: '1.5px',
-          background: '#FEEB3D',
+          background: isYellow ? 'rgba(0,0,0,0.55)' : '#FEEB3D',
           flexShrink: 0,
         }}
       />
@@ -120,7 +136,7 @@ export default function HeroSection() {
           overflow: 'hidden',
           padding: '0.85rem 0',
           width: '100%',
-          borderBottom: '1px solid rgba(255,255,255,0.05)',
+          borderBottom: isYellow ? '1px solid rgba(0,0,0,0.12)' : '1px solid rgba(255,255,255,0.05)',
           flexShrink: 0,
         }}
       >
@@ -130,7 +146,7 @@ export default function HeroSection() {
               key={i}
               style={{
                 margin: '0 2rem',
-                color: 'rgba(255,255,255,0.45)',
+                color: isYellow ? 'rgba(0,0,0,0.55)' : 'rgba(255,255,255,0.45)',
                 fontSize: '0.6rem',
                 letterSpacing: '0.32em',
                 textTransform: 'uppercase',

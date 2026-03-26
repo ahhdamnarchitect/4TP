@@ -104,7 +104,7 @@ Store via a small API + table or approved analytics tool (see implementation tas
 ## Implementation checklist (high level)
 
 - [x] Gate UI + typewriter + Yes/No + 3/4 rule + denied copy (`GateExperience`, `GateScreen`, `lib/gate.ts`)
-- [x] Logo intro hands off to **persistent yellow** email layout (`LogoIntro` + `onGateComplete`, `YellowEmailScreen`)
+- [x] Logo intro hands off to **main landing hero** with a **yellow signup** (no separate email screen)
 - [x] `EmailForm` variant for yellow background
 - [x] Funnel events + `POST /api/funnel` (requires `funnel_events` table — see `docs/supabase-funnel-events.sql`)
 - [ ] `prefers-reduced-motion` pass (typewriter respects reduced motion; logo rings optional)

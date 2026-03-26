@@ -4,8 +4,8 @@ import { useCallback, useEffect, useState } from 'react'
 import { AnimatePresence } from 'framer-motion'
 import GateScreen from './GateScreen'
 import AccessDeniedScreen from './AccessDeniedScreen'
+import AccessGrantedScreen from './AccessGrantedScreen'
 import LogoIntro from './LogoIntro'
-import YellowEmailScreen from './YellowEmailScreen'
 import Nav from './Nav'
 import HeroSection from './HeroSection'
 import ContentSections from './ContentSections'
@@ -14,12 +14,13 @@ import Cursor from './Cursor'
 import { countYes, GATE_QUESTIONS, isAccessGranted } from '@/lib/gate'
 import { trackFunnel } from '@/lib/funnel-client'
 
-type Phase = 'gate' | 'denied' | 'logo' | 'yellow' | 'site'
+type Phase = 'gate' | 'denied' | 'granted' | 'logo' | 'site'
 
 export default function GateExperience() {
   const [phase, setPhase] = useState<Phase>('gate')
   const [questionIndex, setQuestionIndex] = useState(0)
   const [answers, setAnswers] = useState<boolean[]>([])
+  const [yesCount, setYesCount] = useState(0)
 
   useEffect(() => {
     trackFunnel('gate_open', {})
@@ -46,13 +47,14 @@ export default function GateExperience() {
         return
       }
       const granted = isAccessGranted(next)
+      const yc = countYes(next)
+      setYesCount(yc)
       trackFunnel('gate_result', {
         granted,
-        yesCount: countYes(next),
+        yesCount: yc,
       })
       if (granted) {
-        trackFunnel('logo_start', {})
-        setPhase('logo')
+        setPhase('granted')
       } else {
         setPhase('denied')
       }
@@ -63,19 +65,24 @@ export default function GateExperience() {
   const handleTryAgain = useCallback(() => {
     setAnswers([])
     setQuestionIndex(0)
+    setYesCount(0)
     setPhase('gate')
     trackFunnel('gate_open', { retry: true })
   }, [])
 
   const onLogoComplete = useCallback(() => {
-    trackFunnel('yellow_view', {})
-    setPhase('yellow')
-  }, [])
-
-  const handleContinueToSite = useCallback(() => {
     trackFunnel('site_reveal', {})
     setPhase('site')
   }, [])
+
+  useEffect(() => {
+    if (phase !== 'granted') return
+    const t = setTimeout(() => {
+      trackFunnel('logo_start', {})
+      setPhase('logo')
+    }, 1100)
+    return () => clearTimeout(t)
+  }, [phase])
 
   return (
     <>
@@ -84,7 +91,7 @@ export default function GateExperience() {
           <div className="grain-overlay" aria-hidden="true" />
           <Cursor />
           <Nav />
-          <HeroSection />
+          <HeroSection variant="yellow" />
           <ContentSections />
           <MobileCTA />
         </>
@@ -101,10 +108,8 @@ export default function GateExperience() {
         {phase === 'denied' && (
           <AccessDeniedScreen key="denied" onTryAgain={handleTryAgain} />
         )}
+        {phase === 'granted' && <AccessGrantedScreen key="granted" yesCount={yesCount} />}
         {phase === 'logo' && <LogoIntro key="logo" onGateComplete={onLogoComplete} />}
-        {phase === 'yellow' && (
-          <YellowEmailScreen key="yellow" onContinueToSite={handleContinueToSite} />
-        )}
       </AnimatePresence>
     </>
   )

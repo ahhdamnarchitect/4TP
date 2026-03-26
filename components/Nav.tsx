@@ -31,6 +31,7 @@ export default function Nav() {
         fontFamily: 'Inter, InterVariable, system-ui, sans-serif',
         opacity: visible ? 1 : 0,
         transition: 'opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1)',
+        mixBlendMode: 'difference',
       }}
     >
       <span
