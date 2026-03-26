@@ -17,16 +17,17 @@ _Last updated: 2026-03-25_
 ## Deployment
 
 - **Live URL**: https://4-tp.vercel.app (production)
-- **Latest known commit** (brain): prior session `49dc1fd` — confirm git for newer commits after doc updates.
+- **Latest pushed commit**: `6b4173e` on `main` (gate flow + rebase onto remote `ContentSections` / `MobileCTA` work).
 
 ---
 
 ## What Exists
 
 - **`docs/DESIGN.md`** — Product journey: white room → gate (≥3/4 yes) → logo → yellow email hold; motion rules; silhouette/gyro removed by design.
-- **`components/LogoIntro.tsx`** — Yellow square → fill → logo → overlay slides up (reveals black hero today; yellow-hold spec pending).
-- **`components/HeroSection.tsx`** — Centered dark editorial hero; **no** `HeroBackground` (silhouette + gyro removed). Solid black + global grain only.
-- **`components/EmailForm.tsx`**, **`components/Nav.tsx`**, **`components/Cursor.tsx`** — Unchanged behavior from prior sessions unless noted in git.
+- **`components/GateExperience.tsx`** — Orchestrates gate → denied → logo → yellow → **site**. On `phase === 'site'`: grain, cursor, nav, hero, **`ContentSections`**, **`MobileCTA`**. Dispatches **`intro:done`** once when the site phase mounts so `MobileCTA` (still event-driven) can show on touch devices.
+- **`components/LogoIntro.tsx`** — Gate flow: Framer yellow square → rings → logo hold → `onGateComplete` to yellow email (no slide-to-black in gate mode). Non-gate legacy path still slides overlay up.
+- **`components/HeroSection.tsx`** — Centered dark editorial hero (`MOVE FORWARD.`); **no** `HeroBackground`. Solid black + global grain only; `id="hero"` for scroll targets.
+- **`components/EmailForm.tsx`**, **`components/Nav.tsx`** (400ms fade-in), **`components/Cursor.tsx`** — As implemented in tree; Nav does not depend on `intro:done`.
 - **`app/api/subscribe/route.ts`** — Supabase **client created inside `POST`** after env check; Resend send only if `RESEND_API_KEY` set. **Local `next build` works without env vars.**
 
 - **`public/hero-silhouette-2.png`** — Unused after removal of gyro layer; safe to delete to reduce size (see `docs/DESIGN.md`).
@@ -44,6 +45,6 @@ _Last updated: 2026-03-25_
 
 ## Open Questions
 
-- Implement gate + typewriter + yellow email per `docs/DESIGN.md`.
+- Run `docs/supabase-funnel-events.sql` in Supabase if funnel persistence is desired.
 - Custom domain beyond `4-tp.vercel.app`?
 - Remove `hero-silhouette-2.png` / `4TPCirclePppl.png` when ready?

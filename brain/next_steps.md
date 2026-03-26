@@ -6,38 +6,34 @@ _Last updated: 2026-03-25_
 
 ## Immediate / Resume Here
 
-- [ ] **Implement client flow** per `docs/DESIGN.md` — white room, gate (typewriter + Yes/No, ≥3/4), denied, logo, **yellow hold** + email variant, funnel tracking.
-- [ ] **Verify latest deploy** on https://4-tp.vercel.app after gate work lands.
-- [ ] **Verify `49dc1fd` deploy is READY** — confirm Vercel deployed the eyebrow + caption fix to production. Check https://4-tp.vercel.app on a real mobile device.
-- [ ] **Mobile smoke test** — confirm: (1) eyebrow "Education · Inspiration · Discipline · Innovation" all on one line, no clipping; (2) "JOIN THE NETWORK — BE FIRST TO KNOW" caption is clearly readable; (3) no horizontal scroll; (4) form stacks vertically on narrow screens.
-- [ ] **Verify email subscribe flow end-to-end** — submit a test email on https://4-tp.vercel.app, confirm Supabase insert and Resend confirmation delivery.
-- [ ] **Decide on `4TPCirclePppl.png`** — either remove from `/public` (unused), or source a clean version without baked-in text for future use.
+- [ ] **Confirm Vercel production** for commit `6b4173e` — https://4-tp.vercel.app (gate → yellow → site with sections + mobile CTA).
+- [ ] **Run `docs/supabase-funnel-events.sql`** in the Supabase SQL editor if funnel analytics should persist.
+- [ ] **Manual QA** — full gate flow on mobile and desktop; sticky mobile CTA after site reveal; email subscribe from hero and yellow screen.
+- [ ] **Verify email subscribe end-to-end** — test address on production; confirm Supabase row + Resend (if key set).
 
 ---
 
 ## Design / UX
 
-- [ ] Gate + yellow email (see `docs/DESIGN.md`) — primary; old “add sections below hero” is **post–Phase 1** unless client asks.
-- [ ] Review Nav after gate ships — links when real destinations exist.
+- [ ] Review Nav when real destinations exist (links, etc.).
+- [ ] Optional: trim unused assets (`hero-silhouette-2.png`, `4TPCirclePppl.png`) when ready.
 
 ---
 
 ## Infrastructure / Reliability
 
-- [ ] Add lightweight smoke test for `/api/subscribe` (valid email, duplicate email, invalid email).
-- [ ] Add production monitoring or alerting on Supabase subscriber inserts.
-- [ ] Confirm custom domain configuration if planned (beyond `4-tp.vercel.app`).
+- [ ] Add lightweight smoke tests for `/api/subscribe` and `/api/funnel`.
+- [ ] Plan Next.js security upgrade when feasible (`npm audit`).
 
 ---
 
 ## Backlog
 
-- [ ] Refactor HTML email template in `/api/subscribe/route.ts` into a separate template module.
-- [ ] Add periodic architecture/context refresh after major milestones.
-- [ ] Explore adding a `robots.txt` and sitemap for SEO readiness.
+- [ ] Extract Resend HTML template from `subscribe` route into a module.
+- [ ] `robots.txt` / sitemap if SEO becomes a priority.
 
 ---
 
 ## Blockers
 
-- None currently. Deployment is live and verified.
+- None currently.

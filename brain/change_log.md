@@ -11,6 +11,21 @@
 ## Entries
 
 - Date: 2026-03-25
+- Change: Post-push brain + `docs/PROGRESS.md` sync (commit `901c20e`).
+- Files Modified: `brain/current_state.md`, `brain/change_log.md`, `brain/next_steps.md`, `brain/decisions.md`, `docs/PROGRESS.md`
+- Reason: Reflect shipped gate rebase, `intro:done` bridge, and next QA steps.
+
+- Date: 2026-03-25
+- Change: Rebased gate work onto remote `main`, resolved conflicts (gate-first `LogoIntro`, editorial `HeroSection`, lazy subscribe, merged `globals.css` with gate + `section-grid-lines` + `navDotPulse`), removed `HeroBackground`, wired `ContentSections` + `MobileCTA` inside `GateExperience` and dispatch `intro:done` on site phase; pushed `6b4173e`.
+- Files Modified:
+  - `app/page.tsx`, `app/globals.css`, `app/api/subscribe/route.ts`
+  - `components/GateExperience.tsx`, `components/LogoIntro.tsx`, `components/HeroSection.tsx`, `components/Nav.tsx`
+  - `components/HeroBackground.tsx` (deleted)
+  - `package-lock.json`
+  - `brain/*`, `docs/PROGRESS.md` (post-push sync)
+- Reason: Remote had GSAP intro + sections; local had full gate funnel — unified product path per `DESIGN.md` and shipped to GitHub.
+
+- Date: 2026-03-25
 - Change: Windows npm helpers (`scripts\install.cmd`, `scripts\build.cmd`); lazy Supabase/Resend in subscribe API; brain + cheat sheet updated; `npm install` + `npm run build` verified via cmd.
 - Files Modified:
   - `scripts/install.cmd`

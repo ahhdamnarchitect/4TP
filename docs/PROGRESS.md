@@ -3,11 +3,26 @@
 Update this file at the end of every session.
 
 - Last Updated: 2026-03-25
-- Current Status: Phase 1 — design spec, hero simplified, local build path documented; gate flow not yet implemented
+- Current Status: Phase 1 — gate flow shipped on `main` (`6b4173e`); rebase merged remote sections/CTA with gate orchestration
 
 ---
 
 ## Session Log
+
+### Session 9 - 2026-03-25
+
+Completed:
+
+- Finished **rebase** of gate commit onto remote `main` (remote had `ContentSections`, `MobileCTA`, GSAP `LogoIntro` path); resolved conflicts in favor of gate funnel + editorial hero + Framer gate `LogoIntro`.
+- **`GateExperience`**: mounts `ContentSections` + `MobileCTA` after hero; dispatches **`intro:done`** when `phase === 'site'`.
+- **`globals.css`**: gate styles from gate branch plus **`section-grid-lines`** + **`navDotPulse`** for downstream components.
+- Removed **`HeroBackground`** (delete confirmed).
+- **`npm run build`** green; **pushed** `origin/main` at `6b4173e`.
+- Brain + this log updated post-push.
+
+Next:
+
+- Vercel production verification; run Supabase funnel SQL if needed; full-device QA.
 
 ### Session 6 - 2026-03-25
 

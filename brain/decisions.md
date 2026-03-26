@@ -11,6 +11,12 @@
 Append entries below as relevant.
 
 - Date: 2026-03-25
+- Decision: After rebasing gate work onto remote, keep **one** site shell: `GateExperience` renders hero + **`ContentSections`** + **`MobileCTA`** when `phase === 'site'`. Dispatch a single **`intro:done`** custom event when entering the site phase so existing `MobileCTA` logic (touch + scroll) keeps working without a separate GSAP `LogoIntro` morph path.
+- Reason: Remote had scroll-driven sections and a mobile CTA tied to `intro:done`; gate flow replaces the old logo morph but components still expect the event once the main site is shown.
+- Alternatives Considered: Refactor `MobileCTA` to use `data-phase` or props only; duplicate GSAP intro for non-gate.
+- Impact: Cohesive funnel-first UX; minimal changes to `MobileCTA`.
+
+- Date: 2026-03-25
 - Decision: On Windows, document Node path `C:\Users\e159305\node\node-v25.8.2-win-x64` and provide `scripts\install.cmd` / `scripts\build.cmd` so `npm` works from **cmd** when Node is not on the default PATH.
 - Reason: PowerShell sessions used by tooling may not inherit Node; user preference for cmd + explicit PATH.
 - Alternatives Considered: Rely on global PATH only; document PowerShell `$env:Path` prepend only.
