@@ -1,6 +1,8 @@
 -- Run in Supabase SQL editor (or migration) so /api/funnel can persist events.
 -- RLS: allow anonymous inserts from the server route using the anon key.
 
+create extension if not exists pgcrypto;
+
 create table if not exists public.funnel_events (
   id uuid default gen_random_uuid() primary key,
   created_at timestamptz default now() not null,

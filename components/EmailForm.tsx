@@ -75,7 +75,7 @@ export default function EmailForm({ variant = 'dark', onSuccess }: EmailFormProp
                 marginBottom: '0.5rem',
               }}
             >
-              You're in.
+              You&apos;re in.
             </p>
             <p
               style={{
