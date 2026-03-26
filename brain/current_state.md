@@ -29,6 +29,8 @@ _Last updated: 2026-03-25_
 - **`components/HeroSection.tsx`** — Centered dark editorial hero (`MOVE FORWARD.`); **no** `HeroBackground`. Solid black + global grain only; `id="hero"` for scroll targets.
 - **`components/EmailForm.tsx`**, **`components/Nav.tsx`** (400ms fade-in), **`components/Cursor.tsx`** — As implemented in tree; Nav does not depend on `intro:done`.
 - **`app/api/subscribe/route.ts`** — Supabase **client created inside `POST`** after env check; Resend send only if `RESEND_API_KEY` set. **Local `next build` works without env vars.**
+- **`.eslintrc.json`** — Ensures `npm run lint` runs without an interactive setup prompt.
+- **`app/favicon.ico/route.ts`** — Returns `public/4.png` for `/favicon.ico` to avoid a favicon 404 in production logs.
 
 - **`public/hero-silhouette-2.png`** — Unused after removal of gyro layer; safe to delete to reduce size (see `docs/DESIGN.md`).
 

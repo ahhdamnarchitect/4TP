@@ -11,6 +11,16 @@
 ## Entries
 
 - Date: 2026-03-25
+- Change: Add ESLint config so `npm run lint` runs non-interactively; fix `react/no-unescaped-entities` in `EmailForm`; update Supabase funnel SQL to include `pgcrypto`.
+- Files Modified: `.eslintrc.json`, `components/EmailForm.tsx`, `docs/supabase-funnel-events.sql`
+- Reason: `next lint` was prompting for setup; keep lint runnable in CI/local and ensure Supabase SQL works with `gen_random_uuid()`.
+
+- Date: 2026-03-25
+- Change: Serve `/favicon.ico` via a route handler returning `public/4.png` (avoid committing binary `.ico`).
+- Files Modified: `app/favicon.ico/route.ts`
+- Reason: Production was logging a 404 for `/favicon.ico`.
+
+- Date: 2026-03-25
 - Change: Post-push brain + `docs/PROGRESS.md` sync (commit `901c20e`).
 - Files Modified: `brain/current_state.md`, `brain/change_log.md`, `brain/next_steps.md`, `brain/decisions.md`, `docs/PROGRESS.md`
 - Reason: Reflect shipped gate rebase, `intro:done` bridge, and next QA steps.
