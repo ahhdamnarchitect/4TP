@@ -6,24 +6,29 @@ export type Pillar = 'Education' | 'Inspiration' | 'Discipline' | 'Innovation'
 export type GateQuestion = {
   pillar: Pillar
   text: string
+  choices?: readonly { label: string; yes: boolean }[]
 }
 
 export const GATE_QUESTIONS: readonly GateQuestion[] = [
   {
     pillar: 'Education',
-    text: 'Do you invest in learning and growth — for yourself and others?',
+    text: 'Are you someone who likes to inspire and push boundaries?',
   },
   {
     pillar: 'Inspiration',
-    text: 'Do you aim to inspire and elevate the people around you?',
+    text: 'Are you curious, do you like challenging perspectives?',
   },
   {
     pillar: 'Discipline',
-    text: 'Do you show up with discipline when it matters?',
+    text: 'Are you someone who writes your ideas or goals down?',
   },
   {
     pillar: 'Innovation',
-    text: 'Do you lean forward — open to new ideas and better ways?',
+    text: 'If you had all the knowledge in the world, would you keep it or share it?',
+    choices: [
+      { label: 'Keep It', yes: false },
+      { label: 'Share It', yes: true },
+    ] as const,
   },
 ] as const
 

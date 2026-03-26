@@ -6,6 +6,7 @@ import TypewriterText from './TypewriterText'
 import { GATE_QUESTIONS } from '@/lib/gate'
 import { trackFunnel } from '@/lib/funnel-client'
 import { useEffect, useState } from 'react'
+import LogoDockIntro from './LogoDockIntro'
 
 type Props = {
   questionIndex: number
@@ -49,6 +50,8 @@ export default function GateScreen({ questionIndex, onAnswer, locked = false, gr
         <div className="gate-screen-bg-grade" />
       </div>
 
+      <LogoDockIntro dockedOnly={locked} />
+
       <div className="gate-screen-inner">
         <p className="gate-pillar">{q.pillar}</p>
 
@@ -78,12 +81,29 @@ export default function GateScreen({ questionIndex, onAnswer, locked = false, gr
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.35, delay: 0.05 }}
             >
-              <button type="button" className="gate-btn gate-btn-yes" onClick={() => handle(true)}>
-                Yes
-              </button>
-              <button type="button" className="gate-btn gate-btn-no" onClick={() => handle(false)}>
-                No
-              </button>
+              {q.choices?.length ? (
+                <>
+                  {q.choices.map((c) => (
+                    <button
+                      key={c.label}
+                      type="button"
+                      className={c.yes ? 'gate-btn gate-btn-yes' : 'gate-btn gate-btn-no'}
+                      onClick={() => handle(c.yes)}
+                    >
+                      {c.label}
+                    </button>
+                  ))}
+                </>
+              ) : (
+                <>
+                  <button type="button" className="gate-btn gate-btn-yes" onClick={() => handle(true)}>
+                    Yes
+                  </button>
+                  <button type="button" className="gate-btn gate-btn-no" onClick={() => handle(false)}>
+                    No
+                  </button>
+                </>
+              )}
             </motion.div>
           )}
         </div>

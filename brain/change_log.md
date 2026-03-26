@@ -12,6 +12,11 @@
 ## Entries
 
 - Date: 2026-03-26
+- Change: Updated gate questions to Milanote copy and added explicit Q4 choice mapping (`Keep It` / `Share It` with `Share It => yes`); added `LogoDockIntro` brand animation so black-4 yellow-square logo appears on gate load and docks top-left.
+- Files Modified: `lib/gate.ts`, `components/GateScreen.tsx`, `components/LogoDockIntro.tsx`, `app/globals.css`
+- Reason: Align gate questionnaire copy with client brief and reinforce brand orientation from first paint without changing gate phase machine or funnel tracking.
+
+- Date: 2026-03-26
 - Change: Smooth single-scene gate flow (no full-screen fade between questions); cinematic gate grade + bold question typography; in-place Access Granted overlay with brief static beat; soften gate-mode `LogoIntro` black overlay; update nav mark to brand yellow boxed “4” + “TP”.
 - Files Modified: `components/GateExperience.tsx`, `components/GateScreen.tsx`, `components/LogoIntro.tsx`, `components/Nav.tsx`, `app/globals.css`
 - Reason: Align gate experience with reference aesthetics (cinematic questions + theatrical in-place verdict) and remove “black screen reload” feeling while keeping the site landing vibrant yellow and on-brand.

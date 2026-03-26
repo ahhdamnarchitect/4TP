@@ -13,6 +13,12 @@
 Append entries below as relevant.
 
 - Date: 2026-03-26
+- Decision: Extend `GATE_QUESTIONS` schema with optional `choices` metadata and keep `onAnswer(yes:boolean)` flow unchanged; map Q4 (`Keep It` / `Share It`) to boolean so scoring/funnel events stay intact.
+- Reason: Client-required question copy/choices needed richer UI than plain Yes/No, but gate rule (`>=3 yes`) and analytics pipeline should not change.
+- Alternatives Considered: Switch answers to a richer discriminated union across all phases; hardcode Q4 button labels in `GateScreen`.
+- Impact: Backward-compatible gate engine; question content remains single-source in `lib/gate.ts`; minimal surface-area change.
+
+- Date: 2026-03-26
 - Decision: Keep the gate experience as a **single mounted scene**; animate only the question line between steps and render **Access Granted** as an in-place overlay with a brief static beat before `LogoIntro`.
 - Reason: Removes the “full-screen reload” feeling between questions and keeps the verdict theatrical without teleporting to a separate screen.
 - Alternatives Considered: Key/unmount the full `GateScreen` per question; show `AccessGrantedScreen` as its own full-screen phase.

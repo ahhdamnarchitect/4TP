@@ -289,6 +289,14 @@ body {
     font-family: 'Inter', 'InterVariable', system-ui, sans-serif;
 }
 
+.gate-logo-dock {
+    position: fixed;
+    z-index: 120;
+    pointer-events: none;
+    filter: drop-shadow(0 20px 60px rgba(0,0,0,0.35));
+    transform-origin: top left;
+}
+
 .gate-screen-bg {
     position: absolute;
     inset: 0;

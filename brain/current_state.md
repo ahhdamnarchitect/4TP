@@ -27,7 +27,9 @@
 
 - **`docs/DESIGN.md`** — Product journey: white room → gate (≥3/4 yes) → logo → yellow email hold; motion rules; silhouette/gyro removed by design.
 - **`components/GateExperience.tsx`** — Orchestrates **single-scene gate** → denied or **in-place granted overlay** → logo → **site**. Gate screen stays mounted across questions; only the question line transitions. Dispatches **`intro:done`** once when the site phase mounts so `MobileCTA` (still event-driven) can show on touch devices.
-- **`components/GateScreen.tsx`** — White-room gate scene with cinematic grade + bold question headline; renders an **Access Granted** overlay (boxed, on-brand) and a brief static beat when locked.
+- **`components/GateScreen.tsx`** — White-room gate scene with cinematic grade + bold question headline; renders Q1–Q3 as **Yes/No** and Q4 as **Keep It / Share It** from question metadata; renders an **Access Granted** overlay (boxed, on-brand) and a brief static beat when locked.
+- **`components/LogoDockIntro.tsx`** — New gated-load logo beat: `public/4.png` (black “4” in yellow square) animates center-in and docks to top-left to keep brand orientation during questionnaire.
+- **`lib/gate.ts`** — Gate copy now matches Milanote wording; Q4 supports explicit choice metadata (`choices`) while preserving boolean scoring path.
 - **`components/LogoIntro.tsx`** — Gate flow: Framer yellow square → rings → logo hold → `onGateComplete` to site. In gate mode, overlay background is **semi-transparent** (less black-screen cut). Non-gate legacy path still slides overlay up.
 - **`components/AccessDeniedScreen.tsx`** — Denied screen beat (still a separate phase). `AccessGrantedScreen` currently exists but is no longer used by the gate flow.
 - **`components/HeroSection.tsx`** — Now supports `variant="yellow"` for the main email-entry landing hero (matches the logo yellow); `id="hero"` for scroll targets.
