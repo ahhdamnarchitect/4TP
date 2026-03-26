@@ -2,56 +2,54 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 import { Resend } from 'resend'
 
-// Clients initialized lazily inside the handler so missing env vars
-// during build-time static analysis don't throw module-level errors.
-
 export async function POST(req: NextRequest) {
-    const supabase = createClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-    )
-    const resend = new Resend(process.env.RESEND_API_KEY)
-    try {
-          const { email } = await req.json()
+  try {
+    const { email } = await req.json()
 
-          // Validate
-          if (!email || typeof email !== 'string') {
-                  return NextResponse.json({ error: 'Email is required.' }, { status: 400 })
-                }
+    if (!email || typeof email !== 'string') {
+      return NextResponse.json({ error: 'Email is required.' }, { status: 400 })
+    }
 
-          const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-          if (!emailRegex.test(email)) {
-                  return NextResponse.json({ error: 'Please enter a valid email.' }, { status: 400 })
-                }
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (!emailRegex.test(email)) {
+      return NextResponse.json({ error: 'Please enter a valid email.' }, { status: 400 })
+    }
 
-          const normalizedEmail = email.toLowerCase().trim()
+    const normalizedEmail = email.toLowerCase().trim()
 
-          // Store in Supabase
-          const { error: dbError } = await supabase
-            .from('subscribers')
-            .insert([{ email: normalizedEmail, source: 'landing_page' }])
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+    const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+    if (!supabaseUrl || !supabaseKey) {
+      console.error('Subscribe: missing NEXT_PUBLIC_SUPABASE_URL or NEXT_PUBLIC_SUPABASE_ANON_KEY')
+      return NextResponse.json({ error: 'Server configuration error.' }, { status: 500 })
+    }
 
-          if (dbError) {
-                  // Handle duplicate email gracefully
-                  if (dbError.code === '23505') {
-                            return NextResponse.json(
-                                        { error: "You're already on the list." },
-                                        { status: 409 }
-                                      )
-                          }
-                  console.error('Supabase error:', dbError)
-                  return NextResponse.json(
-                            { error: 'Failed to save your email. Please try again.' },
-                            { status: 500 }
-                          )
-                }
+    const supabase = createClient(supabaseUrl, supabaseKey)
 
-          // Send confirmation email via Resend
-          const { error: emailError } = await resend.emails.send({
-                  from: '4TP Network <hello@4tp.network>',
-                  to: normalizedEmail,
-                  subject: "You're in — 4TP Network",
-                  html: `
+    const { error: dbError } = await supabase
+      .from('subscribers')
+      .insert([{ email: normalizedEmail, source: 'landing_page' }])
+
+    if (dbError) {
+      if (dbError.code === '23505') {
+        return NextResponse.json({ error: "You're already on the list." }, { status: 409 })
+      }
+      console.error('Supabase error:', dbError)
+      return NextResponse.json(
+        { error: 'Failed to save your email. Please try again.' },
+        { status: 500 }
+      )
+    }
+
+    const resendKey = process.env.RESEND_API_KEY
+    let emailError: Error | null = null
+    if (resendKey) {
+      const resend = new Resend(resendKey)
+      const sent = await resend.emails.send({
+        from: '4TP Network <hello@4tp.network>',
+        to: normalizedEmail,
+        subject: "You're in — 4TP Network",
+        html: `
                     <!DOCTYPE html>
                     <html lang="en">
                     <head>
@@ -150,10 +148,11 @@ export async function POST(req: NextRequest) {
                     </body>
                     </html>
                   `,
-                })
+      })
+      emailError = sent.error ?? null
+    }
 
-          if (emailError) {
-                  // Don't fail the whole request if email fails — subscriber is already saved
+    if (emailError) {
       console.error('Resend error:', emailError)
     }
 
@@ -161,7 +160,6 @@ export async function POST(req: NextRequest) {
       success: true,
       message: "You're in. Check your inbox.",
     })
-
   } catch (err) {
     console.error('Subscribe error:', err)
     return NextResponse.json(

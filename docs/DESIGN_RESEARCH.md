@@ -1,7 +1,8 @@
 # 4TP - Design Research and Creative Direction
 
-- Last Updated: 2026-03-20
+- Last Updated: 2026-03-25
 - Purpose: Living design reference and implementation checklist for each session.
+- **Product journey, gate flow, and background strategy:** see **`docs/DESIGN.md`**.
 
 ---
 
@@ -71,8 +72,9 @@ Implementation note: keep current Framer Motion approach unless performance or q
 - [x] Initial trend research captured
 - [x] Brand direction locked (dark + yellow, editorial tone)
 - [x] Logo intro concept implemented in code
+- [x] Product/UX spec documented in `docs/DESIGN.md` (gate, yellow hold, no gyro hero)
+- [ ] Implement items in `docs/DESIGN.md` implementation checklist
 - [ ] Vercel deployment confirmed green after latest fixes (latest known blocker in `LogoIntro.tsx` has been fixed)
 - [ ] Validate intro pacing on desktop and mobile
 - [ ] Verify email form end-to-end (API, Supabase insert, Resend send)
 - [ ] Run mobile spacing and typography polish pass
-- [ ] Prepare phase 2 interaction layer (scroll reveals/parallax)

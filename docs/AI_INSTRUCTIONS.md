@@ -2,7 +2,7 @@
 
 Standing protocol for any AI assistant (Cursor, Claude, GPT, Copilot) working on this repository.
 
-- Last updated: 2026-03-20
+- Last updated: 2026-03-25
 
 ---
 
@@ -11,8 +11,9 @@ Standing protocol for any AI assistant (Cursor, Claude, GPT, Copilot) working on
 ### At Session Start
 
 1. Read `docs/PROGRESS.md`.
-2. Read `docs/DESIGN_RESEARCH.md`.
-3. Continue from the latest logged state before making any changes.
+2. Read `docs/DESIGN.md` (product UX, journey, motion, what not to ship).
+3. Read `docs/DESIGN_RESEARCH.md`.
+4. Continue from the latest logged state before making any changes.
 
 ### At Session End
 
@@ -21,8 +22,9 @@ Standing protocol for any AI assistant (Cursor, Claude, GPT, Copilot) working on
    - what is blocked or unverified
    - next actions
 2. Update the checklist in `docs/PROGRESS.md`.
-3. Update `docs/DESIGN_RESEARCH.md` "Next Steps" section.
-4. Commit docs updates using:
+3. Update `docs/DESIGN.md` implementation checklist if UX scope changed.
+4. Update `docs/DESIGN_RESEARCH.md` "Next Steps" section.
+5. Commit docs updates using:
    - `docs: update PROGRESS.md and DESIGN_RESEARCH.md — session YYYY-MM-DD`
 
 Do not skip this. These files are the continuity layer between AI sessions.

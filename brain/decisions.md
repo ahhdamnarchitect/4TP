@@ -10,6 +10,24 @@
 ## Decisions
 Append entries below as relevant.
 
+- Date: 2026-03-25
+- Decision: On Windows, document Node path `C:\Users\e159305\node\node-v25.8.2-win-x64` and provide `scripts\install.cmd` / `scripts\build.cmd` so `npm` works from **cmd** when Node is not on the default PATH.
+- Reason: PowerShell sessions used by tooling may not inherit Node; user preference for cmd + explicit PATH.
+- Alternatives Considered: Rely on global PATH only; document PowerShell `$env:Path` prepend only.
+- Impact: Reproducible local install/build without hunting PATH.
+
+- Date: 2026-03-25
+- Decision: Remove `HeroBackground` (silhouette + gyro); do not replace with another interactive background layer by default.
+- Reason: Not in client brief; added complexity (RAF, gyro permissions) and competed with planned white-room → gate story.
+- Alternatives Considered: Static gradient or geometric accent only; keep gyro.
+- Impact: Simpler hero; editorial negative space + grain. See `docs/DESIGN.md`.
+
+- Date: 2026-03-25
+- Decision: Instantiate Supabase and Resend clients **inside** `POST` for `/api/subscribe`, not at module top level.
+- Reason: `next build` collects route modules without env vars locally; top-level `createClient(undefined, …)` threw and failed the build.
+- Alternatives Considered: Require `.env.local` for every build; use dynamic import.
+- Impact: CI and local `npm run build` succeed without secrets; runtime still requires env on Vercel.
+
 - Date: 2026-03-20 (Session 6)
 - Decision: Rebuild HeroSection with solid black background — no background image.
 - Reason: `4TPCirclePppl.png` was blurry and had baked-in text watermarks making it unusable as a background. Solid black is cleaner and more editorial.

@@ -1,11 +1,13 @@
 # Next Steps
 
-_Last updated: 2026-03-20 (Session 7)_
+_Last updated: 2026-03-25_
 
 ---
 
 ## Immediate / Resume Here
 
+- [ ] **Implement client flow** per `docs/DESIGN.md` — white room, gate (typewriter + Yes/No, ≥3/4), denied, logo, **yellow hold** + email variant, funnel tracking.
+- [ ] **Verify latest deploy** on https://4-tp.vercel.app after gate work lands.
 - [ ] **Verify `49dc1fd` deploy is READY** — confirm Vercel deployed the eyebrow + caption fix to production. Check https://4-tp.vercel.app on a real mobile device.
 - [ ] **Mobile smoke test** — confirm: (1) eyebrow "Education · Inspiration · Discipline · Innovation" all on one line, no clipping; (2) "JOIN THE NETWORK — BE FIRST TO KNOW" caption is clearly readable; (3) no horizontal scroll; (4) form stacks vertically on narrow screens.
 - [ ] **Verify email subscribe flow end-to-end** — submit a test email on https://4-tp.vercel.app, confirm Supabase insert and Resend confirmation delivery.
@@ -15,9 +17,8 @@ _Last updated: 2026-03-20 (Session 7)_
 
 ## Design / UX
 
-- [ ] Add a second content section below the hero (e.g., about, values, or upcoming events) to give the page depth — like complexcon's multi-section layout.
-- [ ] Consider adding a scroll-triggered reveal for any future sections.
-- [ ] Review Nav — currently only shows "4TP" and "NETWORK". May want to add actual links when content sections exist.
+- [ ] Gate + yellow email (see `docs/DESIGN.md`) — primary; old “add sections below hero” is **post–Phase 1** unless client asks.
+- [ ] Review Nav after gate ships — links when real destinations exist.
 
 ---
 

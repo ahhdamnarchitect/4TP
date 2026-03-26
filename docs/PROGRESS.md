@@ -2,12 +2,51 @@
 
 Update this file at the end of every session.
 
-- Last Updated: 2026-03-20
-- Current Status: Phase 1 (Landing Page + Waitlist) in progress
+- Last Updated: 2026-03-25
+- Current Status: Phase 1 — design spec, hero simplified, local build path documented; gate flow not yet implemented
 
 ---
 
 ## Session Log
+
+### Session 6 - 2026-03-25
+
+Completed:
+
+- Added `docs/DESIGN.md` (full product journey, motion principles, 3/4 gate, yellow email beat, analytics intent, inspiration notes).
+- Removed silhouette + gyro `HeroBackground` (out of client scope); hero uses intentional negative space + global grain.
+- Pointed `docs/DESIGN_RESEARCH.md` and `docs/AI_INSTRUCTIONS.md` at `DESIGN.md`.
+
+Next:
+
+- Implement gate + typewriter + yellow-hold email + funnel tracking per `DESIGN.md` checklist.
+- Optionally delete `public/hero-silhouette-2.png` when ready to trim assets.
+
+### Session 7 - 2026-03-25
+
+Completed:
+
+- Added `scripts/install.cmd` and `scripts/build.cmd` — prepend `C:\Users\e159305\node\node-v25.8.2-win-x64` to PATH for **cmd** npm/next.
+- Ran `npm install` and `npm run build` successfully via those scripts.
+- Refactored `app/api/subscribe/route.ts` to create Supabase (and optional Resend) **inside** `POST` so `next build` does not require env vars at module load.
+- Updated brain (`current_state`, `next_steps`, `decisions`, `change_log`, `cheat_sheet`).
+
+Next:
+
+- Commit and push when ready.
+
+### Session 8 - 2026-03-25
+
+Completed:
+
+- Implemented full **gate flow** per `docs/DESIGN.md`: white room (`/whiteroom.jpg`), 4 pillar questions with typewriter + Yes/No, **≥3 yes** grants access, denied screen with retry, logo reward on yellow (no slide to black), **yellow email** screen with `EmailForm` variant, main site (grain + cursor + hero) after successful join + **Continue to site**.
+- Added `POST /api/funnel`, `docs/supabase-funnel-events.sql`, client `trackFunnel` + session id.
+- `public/whiteroom.jpg` copied from repo root for static serving.
+
+Next:
+
+- Run `docs/supabase-funnel-events.sql` in Supabase so funnel events persist.
+- Manual QA: full flow on mobile + desktop.
 
 ### Session 1 - 2026-03-20
 

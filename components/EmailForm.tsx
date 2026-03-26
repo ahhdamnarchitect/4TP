@@ -2,10 +2,17 @@
 
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { trackFunnel } from '@/lib/funnel-client'
 
 type FormState = 'idle' | 'loading' | 'success' | 'error'
 
-export default function EmailForm() {
+type EmailFormProps = {
+  /** Yellow full-screen step: black text and inverted controls. */
+  variant?: 'dark' | 'yellow'
+  onSuccess?: () => void
+}
+
+export default function EmailForm({ variant = 'dark', onSuccess }: EmailFormProps) {
   const [email, setEmail]     = useState('')
   const [state, setState]     = useState<FormState>('idle')
   const [errorMsg, setErrorMsg] = useState('')
@@ -21,6 +28,7 @@ export default function EmailForm() {
 
     setState('loading')
     setErrorMsg('')
+    trackFunnel('email_submit', {})
 
     try {
       const res  = await fetch('/api/subscribe', {
@@ -34,15 +42,19 @@ export default function EmailForm() {
 
       setState('success')
       setEmail('')
+      onSuccess?.()
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : 'Something went wrong.'
+      trackFunnel('email_error', { message })
       setErrorMsg(message)
       setState('error')
     }
   }
 
+  const isYellow = variant === 'yellow'
+
   return (
-    <div style={{ width: '100%' }}>
+    <div style={{ width: '100%' }} data-email-variant={variant}>
       <AnimatePresence mode="wait">
         {state === 'success' ? (
           <motion.div
@@ -59,13 +71,19 @@ export default function EmailForm() {
                 fontSize: '0.8rem',
                 letterSpacing: '0.12em',
                 textTransform: 'uppercase',
-                color: '#FEEB3D',
+                color: isYellow ? '#000' : '#FEEB3D',
                 marginBottom: '0.5rem',
               }}
             >
               You're in.
             </p>
-            <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: '0.75rem', letterSpacing: '0.05em' }}>
+            <p
+              style={{
+                color: isYellow ? 'rgba(0,0,0,0.55)' : 'rgba(255,255,255,0.4)',
+                fontSize: '0.75rem',
+                letterSpacing: '0.05em',
+              }}
+            >
               Check your inbox — confirmation on the way.
             </p>
           </motion.div>
@@ -85,7 +103,6 @@ export default function EmailForm() {
             transition={{ duration: 0.3 }}
             noValidate
           >
-            {/* Input row — stacks on mobile, side-by-side on larger screens */}
             <div
               style={{
                 display: 'flex',
@@ -103,12 +120,12 @@ export default function EmailForm() {
                   if (state === 'error') setState('idle')
                 }}
                 placeholder="Email Address"
-                className="email-input"
+                className={isYellow ? 'email-input email-input-yellow' : 'email-input'}
                 style={{
                   width: '100%',
                   padding: '1rem 1.5rem',
                   fontSize: '0.9rem',
-                  color: '#fff',
+                  color: isYellow ? '#000' : '#fff',
                   borderRadius: '9999px',
                   boxSizing: 'border-box',
                 }}
@@ -121,7 +138,7 @@ export default function EmailForm() {
 
               <button
                 type="submit"
-                className="cta-button"
+                className={isYellow ? 'cta-button cta-button-yellow' : 'cta-button'}
                 style={{
                   width: '100%',
                   padding: '1rem 2rem',
@@ -140,7 +157,7 @@ export default function EmailForm() {
                         width: '12px',
                         height: '12px',
                         border: '1.5px solid rgba(0,0,0,0.3)',
-                        borderTopColor: '#000',
+                        borderTopColor: isYellow ? '#fff' : '#000',
                         borderRadius: '50%',
                         animation: 'spin 0.7s linear infinite',
                       }}
@@ -166,7 +183,7 @@ export default function EmailForm() {
             style={{
               marginTop: '0.75rem',
               fontSize: '0.75rem',
-              color: 'rgba(248,113,113,0.85)',
+              color: isYellow ? 'rgba(127,29,29,0.95)' : 'rgba(248,113,113,0.85)',
               letterSpacing: '0.03em',
               textAlign: 'center',
             }}

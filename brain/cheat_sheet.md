@@ -16,6 +16,18 @@
 - `brain/next_steps.md`: immediate tasks, backlog, blockers
 - `brain/change_log.md`: dated change history
 
+## Windows: npm / Next when Node is not on PATH
+
+From **cmd** (not PowerShell), before `npm`:
+
+```bat
+set "PATH=C:\Users\e159305\node\node-v25.8.2-win-x64;%PATH%"
+```
+
+Or from repo root: `scripts\install.cmd` then `scripts\build.cmd`.
+
+---
+
 ## Command Shortcuts
 
 - `/start`: summarize current state and priorities

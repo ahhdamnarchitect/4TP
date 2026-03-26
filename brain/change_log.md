@@ -10,6 +10,19 @@
 
 ## Entries
 
+- Date: 2026-03-25
+- Change: Windows npm helpers (`scripts\install.cmd`, `scripts\build.cmd`); lazy Supabase/Resend in subscribe API; brain + cheat sheet updated; `npm install` + `npm run build` verified via cmd.
+- Files Modified:
+  - `scripts/install.cmd`
+  - `scripts/build.cmd`
+  - `app/api/subscribe/route.ts`
+  - `brain/current_state.md`
+  - `brain/next_steps.md`
+  - `brain/decisions.md`
+  - `brain/change_log.md`
+  - `brain/cheat_sheet.md`
+- Reason: User needs Node on PATH via cmd; build failed without env at import time; sync brain with DESIGN.md-era state and removed HeroBackground.
+
 - Date: 2026-03-20 (Session 7)
 - Change: Brightened caption text, fixed mobile eyebrow clipping.
 - Files Modified:
