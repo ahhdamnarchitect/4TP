@@ -56,7 +56,7 @@ export default function LogoIntro({ onGateComplete }: Props) {
         inset: 0,
         zIndex: 200,
         overflow: 'hidden',
-        background: '#000',
+        background: gateMode ? 'rgba(0,0,0,0.55)' : '#000',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',

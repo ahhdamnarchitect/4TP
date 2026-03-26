@@ -1,6 +1,7 @@
 # Change Log
 
 ## Format
+
 - Date:
 - Change:
 - Files Modified:
@@ -9,6 +10,11 @@
 ---
 
 ## Entries
+
+- Date: 2026-03-26
+- Change: Smooth single-scene gate flow (no full-screen fade between questions); cinematic gate grade + bold question typography; in-place Access Granted overlay with brief static beat; soften gate-mode `LogoIntro` black overlay; update nav mark to brand yellow boxed “4” + “TP”.
+- Files Modified: `components/GateExperience.tsx`, `components/GateScreen.tsx`, `components/LogoIntro.tsx`, `components/Nav.tsx`, `app/globals.css`
+- Reason: Align gate experience with reference aesthetics (cinematic questions + theatrical in-place verdict) and remove “black screen reload” feeling while keeping the site landing vibrant yellow and on-brand.
 
 - Date: 2026-03-25
 - Change: Add ESLint config so `npm run lint` runs non-interactively; fix `react/no-unescaped-entities` in `EmailForm`; update Supabase funnel SQL to include `pgcrypto`.
@@ -65,7 +71,7 @@
   - `app/globals.css` (overflow-x hidden + max-width 100vw on html/body; .email-input pill radius + yellow focus glow; .email-form-row responsive media query at 480px)
 - Reason: User feedback — make signup the main focus, not "MOVE FORWARD."; mobile horizontal scroll bug; input too dim; placeholder wording; "2026" irrelevant to brand theme.
 - Commits: `f0e7ea1`
-- Deployment: `dpl_E6UdKiht1zFSU9NWLMnUq7Sr6TYq` — READY — https://4-tp.vercel.app
+- Deployment: `dpl_E6UdKiht1zFSU9NWLMnUq7Sr6TYq` — READY — `https://4-tp.vercel.app`
 
 - Date: 2026-03-20 (Session 6)
 - Change: Complete site rebuild — ComplexCon layout, working logo animation, cursor fix.
@@ -84,7 +90,7 @@
   - `brain/change_log.md`
 - Reason: Previous build had invisible cursor, content hidden by failed animation delays, blurry/broken background image, and layout not matching complexcon.com reference. Full rebuild resolved all issues.
 - Commits: `94c8832` (rebuild), `088656b` (first redesign attempt, prior iteration)
-- Deployment: `dpl_Q4dcFYLQBAq1mx4WQd96GPfJgQda` — READY — https://4-tp.vercel.app
+- Deployment: `dpl_Q4dcFYLQBAq1mx4WQd96GPfJgQda` — READY — `https://4-tp.vercel.app`
 - Verified: ✅ Chrome browser — animation plays, content visible, cursor visible, email form accessible.
 - Date: 2026-03-20
 - Change: Added non-Windows collaborator guide and linked it from Cursor OS README.

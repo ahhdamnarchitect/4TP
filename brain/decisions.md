@@ -1,6 +1,7 @@
 # Decisions Log
 
 ## Format
+
 - Date:
 - Decision:
 - Reason:
@@ -8,7 +9,14 @@
 - Impact:
 
 ## Decisions
+
 Append entries below as relevant.
+
+- Date: 2026-03-26
+- Decision: Keep the gate experience as a **single mounted scene**; animate only the question line between steps and render **Access Granted** as an in-place overlay with a brief static beat before `LogoIntro`.
+- Reason: Removes the “full-screen reload” feeling between questions and keeps the verdict theatrical without teleporting to a separate screen.
+- Alternatives Considered: Key/unmount the full `GateScreen` per question; show `AccessGrantedScreen` as its own full-screen phase.
+- Impact: Smoother mobile/desktop feel; fewer large scene transitions; `AccessGrantedScreen` remains in repo but is no longer used by the gate flow.
 
 - Date: 2026-03-25
 - Decision: After rebasing gate work onto remote, keep **one** site shell: `GateExperience` renders hero + **`ContentSections`** + **`MobileCTA`** when `phase === 'site'`. Dispatch a single **`intro:done`** custom event when entering the site phase so existing `MobileCTA` logic (touch + scroll) keeps working without a separate GSAP `LogoIntro` morph path.
