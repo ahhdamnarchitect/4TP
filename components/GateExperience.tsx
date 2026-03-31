@@ -7,8 +7,6 @@ import AccessDeniedScreen from './AccessDeniedScreen'
 import LogoIntro from './LogoIntro'
 import Nav from './Nav'
 import HeroSection from './HeroSection'
-import ContentSections from './ContentSections'
-import MobileCTA from './MobileCTA'
 import Cursor from './Cursor'
 import { countYes, GATE_QUESTIONS, isAccessGranted } from '@/lib/gate'
 import { trackFunnel } from '@/lib/funnel-client'
@@ -98,9 +96,7 @@ export default function GateExperience() {
           <div className="grain-overlay" aria-hidden="true" />
           <Cursor />
           <Nav />
-          <HeroSection variant="yellow" />
-          <ContentSections />
-          <MobileCTA />
+          <HeroSection />
         </>
       )}
 

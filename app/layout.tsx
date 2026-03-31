@@ -1,6 +1,14 @@
 
 import type { Metadata, Viewport } from 'next'
+import { DM_Serif_Display } from 'next/font/google'
 import './globals.css'
+
+const dmSerif = DM_Serif_Display({
+  weight: '400',
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-display',
+})
 
 export const metadata: Metadata = {
     title: '4TP — Move Forward',
@@ -36,7 +44,7 @@ export default function RootLayout({
     children: React.ReactNode
 }) {
     return (
-          <html lang="en" className="scroll-smooth">
+          <html lang="en" className={`scroll-smooth ${dmSerif.variable}`}>
                 <head>
                         <link rel="preconnect" href="https://rsms.me/" />
                         <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />

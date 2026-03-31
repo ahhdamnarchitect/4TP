@@ -10,21 +10,29 @@ type Props = {
    * Used to avoid re-running the animation when the gate locks for granted.
    */
   dockedOnly?: boolean
+  /** Fired once the logo settles into its docked position. */
+  onDocked?: () => void
 }
 
 const EXPO = [0.16, 1, 0.3, 1] as const
 
-export default function LogoDockIntro({ dockedOnly = false }: Props) {
+export default function LogoDockIntro({ dockedOnly = false, onDocked }: Props) {
   const [docked, setDocked] = useState(dockedOnly)
 
   useEffect(() => {
     if (dockedOnly) {
       setDocked(true)
+      onDocked?.()
       return
     }
-    const t = window.setTimeout(() => setDocked(true), 900)
-    return () => clearTimeout(t)
-  }, [dockedOnly])
+    // Logo docks at 900ms; fire callback after transition settles (+850ms)
+    const dockTimer = window.setTimeout(() => setDocked(true), 900)
+    const callbackTimer = window.setTimeout(() => onDocked?.(), 1800)
+    return () => {
+      clearTimeout(dockTimer)
+      clearTimeout(callbackTimer)
+    }
+  }, [dockedOnly, onDocked])
 
   const variants = useMemo(
     () => ({

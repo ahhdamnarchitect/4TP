@@ -7,12 +7,16 @@ import { trackFunnel } from '@/lib/funnel-client'
 type FormState = 'idle' | 'loading' | 'success' | 'error'
 
 type EmailFormProps = {
-  /** Yellow full-screen step: black text and inverted controls. */
-  variant?: 'dark' | 'yellow'
+  /**
+   * dark   — white-on-black (legacy dark hero)
+   * yellow — black-on-yellow (yellow screen)
+   * light  — black-on-white (Living Paper hero — default)
+   */
+  variant?: 'dark' | 'yellow' | 'light'
   onSuccess?: () => void
 }
 
-export default function EmailForm({ variant = 'dark', onSuccess }: EmailFormProps) {
+export default function EmailForm({ variant = 'light', onSuccess }: EmailFormProps) {
   const [email, setEmail]     = useState('')
   const [state, setState]     = useState<FormState>('idle')
   const [errorMsg, setErrorMsg] = useState('')
@@ -52,6 +56,7 @@ export default function EmailForm({ variant = 'dark', onSuccess }: EmailFormProp
   }
 
   const isYellow = variant === 'yellow'
+  const isLight  = variant === 'light'
 
   return (
     <div style={{ width: '100%' }} data-email-variant={variant}>
@@ -71,7 +76,7 @@ export default function EmailForm({ variant = 'dark', onSuccess }: EmailFormProp
                 fontSize: '0.8rem',
                 letterSpacing: '0.12em',
                 textTransform: 'uppercase',
-                color: isYellow ? '#000' : '#FEEB3D',
+                color: isYellow || isLight ? '#000' : '#FEEB3D',
                 marginBottom: '0.5rem',
               }}
             >
@@ -79,7 +84,7 @@ export default function EmailForm({ variant = 'dark', onSuccess }: EmailFormProp
             </p>
             <p
               style={{
-                color: isYellow ? 'rgba(0,0,0,0.55)' : 'rgba(255,255,255,0.4)',
+                color: isYellow || isLight ? 'rgba(0,0,0,0.55)' : 'rgba(255,255,255,0.4)',
                 fontSize: '0.75rem',
                 letterSpacing: '0.05em',
               }}
@@ -120,12 +125,16 @@ export default function EmailForm({ variant = 'dark', onSuccess }: EmailFormProp
                   if (state === 'error') setState('idle')
                 }}
                 placeholder="Email Address"
-                className={isYellow ? 'email-input email-input-yellow' : 'email-input'}
+                className={
+                  isYellow ? 'email-input email-input-yellow'
+                  : isLight ? 'email-input email-input-light'
+                  : 'email-input'
+                }
                 style={{
                   width: '100%',
                   padding: '1rem 1.5rem',
                   fontSize: '0.9rem',
-                  color: isYellow ? '#000' : '#fff',
+                  color: isYellow || isLight ? '#0a0a0a' : '#fff',
                   borderRadius: '9999px',
                   boxSizing: 'border-box',
                 }}
@@ -138,7 +147,11 @@ export default function EmailForm({ variant = 'dark', onSuccess }: EmailFormProp
 
               <button
                 type="submit"
-                className={isYellow ? 'cta-button cta-button-yellow' : 'cta-button'}
+                className={
+                  isYellow ? 'cta-button cta-button-yellow'
+                  : isLight ? 'cta-button cta-button-light'
+                  : 'cta-button'
+                }
                 style={{
                   width: '100%',
                   padding: '1rem 2rem',
@@ -157,7 +170,7 @@ export default function EmailForm({ variant = 'dark', onSuccess }: EmailFormProp
                         width: '12px',
                         height: '12px',
                         border: '1.5px solid rgba(0,0,0,0.3)',
-                        borderTopColor: isYellow ? '#fff' : '#000',
+                        borderTopColor: isYellow || isLight ? '#FEEB3D' : '#000',
                         borderRadius: '50%',
                         animation: 'spin 0.7s linear infinite',
                       }}
@@ -183,7 +196,7 @@ export default function EmailForm({ variant = 'dark', onSuccess }: EmailFormProp
             style={{
               marginTop: '0.75rem',
               fontSize: '0.75rem',
-              color: isYellow ? 'rgba(127,29,29,0.95)' : 'rgba(248,113,113,0.85)',
+              color: isYellow || isLight ? 'rgba(127,29,29,0.9)' : 'rgba(248,113,113,0.85)',
               letterSpacing: '0.03em',
               textAlign: 'center',
             }}
